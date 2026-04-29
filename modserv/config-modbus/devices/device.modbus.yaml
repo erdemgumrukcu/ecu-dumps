@@ -1,0 +1,15 @@
+deviceList:
+- name: "Device-Modbus-SMP4250"
+  profileName: "Profile-Modbus-SMP4250"
+  description: "This is a Modbus device running in SMP4250"
+  labels: 
+    - "modbus"
+    - "BEAVER"
+    - "SMP4250"
+  protocols:
+    modbus-tcp:
+      Address: "169.254.84.30"
+      Port: "502"
+      UnitID: "1"
+      Timeout: "5"
+      IdleTimeout: "5"
