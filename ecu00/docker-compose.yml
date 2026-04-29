@@ -287,12 +287,14 @@ services:
       DEVICE_DEVICESDIR: /custom-config/devices
       DEVICE_PROFILESDIR: /custom-config/profiles
       WRITABLE_LOGLEVEL: DEBUG
-    hostname: edgex-device-modbus
+    #hostname: edgex-device-modbus
     #image: edgexfoundry/device-modbus:3.1.1
     image: nexus3.edgexfoundry.org:10004/device-modbus-arm64:latest
     platform: linux/arm64
     networks:
-      edgex-network: null
+      edgex-network:
+        aliases:
+          - edgex-device-modbus
       modbus_l2:
         ipv4_address: 169.254.84.241
     ports:
