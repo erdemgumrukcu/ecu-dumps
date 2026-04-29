@@ -293,6 +293,8 @@ services:
     platform: linux/arm64
     networks:
       edgex-network: null
+      modbus_l2:
+        ipv4_address: 169.254.84.241
     ports:
       - mode: ingress
         host_ip: 127.0.0.1
@@ -337,3 +339,11 @@ volumes:
 networks:
   edgex-network:
     name: edgex_edgex-network
+  
+  modbus_l2:
+    driver: macvlan
+    driver_opts:
+      parent: eth0
+    ipam:
+      config:
+        - subnet: 169.254.0.0/16
