@@ -1,0 +1,41 @@
+name: "Profile-MQTT"
+manufacturer: "BEAVER"
+model: "MQTT-DEVICE"
+description: "BEAVER Emulator PMU MQTT"
+labels:
+  - "mqtt"
+  - "test"
+  - "PMUs"
+deviceResources:
+  -
+    name: "voltage"
+    isHidden: false
+    description: "Voltage"
+    properties:
+      valueType: "Float32"
+      readWrite: "RW"
+  -
+    name: "current"
+    isHidden: false
+    description: "Current"
+    properties:
+      valueType: "Float32"
+      readWrite: "RW"
+
+  -
+    name: "phi"
+    isHidden: false
+    description: "Phase Angle"
+    properties:
+      valueType: "Float32"
+      readWrite: "RW"
+
+deviceCommands:
+  -
+    name: "ReadAllMeters"
+    readWrite: "R"
+    isHidden: false
+    resourceOperations:
+        - { deviceResource: "voltage" }
+        - { deviceResource: "current" }
+        - { deviceResource: "phi" }
