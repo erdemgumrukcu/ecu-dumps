@@ -293,6 +293,7 @@ services:
     platform: linux/arm64
     networks:
       edgex-network: null
+      external-access: null
     ports:
       - mode: ingress
         host_ip: 127.0.0.1
@@ -337,3 +338,9 @@ volumes:
 networks:
   edgex-network:
     name: edgex_edgex-network
+  external-access:
+    name: edgex_external-access
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.enable_ip_masquerade: "true"
+      com.docker.network.driver.mtu: "1500"
