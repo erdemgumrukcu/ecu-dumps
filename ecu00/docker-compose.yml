@@ -283,8 +283,8 @@ services:
         required: true
     environment:
       EDGEX_SECURITY_SECRET_STORE: "false"
-      SERVICE_HOST: edgex-device-modbus
-      SERVICE_SERVERBINDADDR: 0.0.0.0
+      SERVICE_HOST: edgex-device-modbus-bridge
+      SERVICE_SERVERBINDADDR: edgex-device-modbus-bridge
       SERVICE_PORT: "59901"
       DEVICE_DEVICESDIR: /custom-config/devices
       DEVICE_PROFILESDIR: /custom-config/profiles
@@ -294,7 +294,9 @@ services:
     image: nexus3.edgexfoundry.org:10004/device-modbus-arm64:latest
     platform: linux/arm64
     networks:
-      edgex-network: null
+      edgex-network:
+        aliases:
+          - edgex-device-modbus-bridge
       modbus-macvlan:
         ipv4_address: 169.254.84.11
     ports:
