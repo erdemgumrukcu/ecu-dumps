@@ -284,6 +284,8 @@ services:
     environment:
       EDGEX_SECURITY_SECRET_STORE: "false"
       SERVICE_HOST: edgex-device-modbus
+      SERVICE_SERVERBINDADDR: 0.0.0.0
+      SERVICE_PORT: "59901"
       DEVICE_DEVICESDIR: /custom-config/devices
       DEVICE_PROFILESDIR: /custom-config/profiles
       WRITABLE_LOGLEVEL: DEBUG
@@ -365,4 +367,4 @@ networks:
       parent: eth0
     ipam:
       config:
-        - subnet: 169.254.84.0/16
+        - subnet: 169.254.0.0/16
