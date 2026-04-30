@@ -293,7 +293,8 @@ services:
     platform: linux/arm64
     networks:
       edgex-network: null
-      external-access: null
+      modbus-l2:
+        ipv4_address: 169.254.84.31   # choose an unused IP on eth0 subnet
     ports:
       - mode: ingress
         host_ip: 127.0.0.1
@@ -338,9 +339,10 @@ volumes:
 networks:
   edgex-network:
     name: edgex_edgex-network
-  external-access:
-    name: edgex_external-access
-    driver: bridge
+  modbus-l2:
+    driver: macvlan
     driver_opts:
-      com.docker.network.bridge.enable_ip_masquerade: "true"
-      com.docker.network.driver.mtu: "1500"
+      parent: eth0
+    ipam:
+      config:
+        - subnet: 169.254.84.0/24
