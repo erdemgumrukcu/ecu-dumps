@@ -293,6 +293,8 @@ services:
     platform: linux/arm64
     networks:
       edgex-network: null
+      modbus-macvlan:
+        ipv4_address: 169.254.84.11
     ports:
       - mode: ingress
         host_ip: 127.0.0.1
@@ -318,6 +320,24 @@ services:
         bind:
           create_host_path: true
 
+  ui:
+    container_name: edgex-ui-go
+    environment:
+      EDGEX_SECURITY_SECRET_STORE: "false"
+      SERVICE_HOST: edgex-ui-go
+    hostname: edgex-ui-go
+    image: nexus3.edgexfoundry.org:10004/edgex-ui-arm64:latest
+    networks:
+      edgex-network: null
+    platform: linux/arm64
+    ports:
+      - mode: ingress
+        target: 4000
+        published: "4000"
+        protocol: tcp
+    read_only: true
+    restart: unless-stopped
+
 volumes:
   consul-config:
     name: edgex_consul-config
@@ -337,3 +357,12 @@ volumes:
 networks:
   edgex-network:
     name: edgex_edgex-network
+
+  modbus-macvlan:
+    name: edgex_modbus-macvlan
+    driver: macvlan
+    driver_opts:
+      parent: eth0
+    ipam:
+      config:
+        - subnet: 169.254.84.0/16
