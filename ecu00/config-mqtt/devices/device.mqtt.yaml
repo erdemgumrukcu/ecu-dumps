@@ -1,0 +1,52 @@
+# Pre-define Devices
+deviceList:
+- name: "pmu1"
+  profileName: "Profile-MQTT"
+  description: "This is a placeholder MQTT device"
+  labels: 
+    - "mqtt"
+    - "BEAVER"
+  protocols:
+    mqtt:
+      CommandTopic: "command/pmu1"
+      ResponseTopic: "commandresponses/"
+- name: "pmu2"
+  profileName: "Profile-MQTT"
+  description: "This is a placeholder MQTT device"
+  labels: 
+    - "mqtt"
+    - "BEAVER"
+  protocols:
+    mqtt:
+      CommandTopic: "command/pmu2"
+      ResponseTopic: "commandresponses/"
+- name: "pmu3"
+  profileName: "Profile-MQTT"
+  description: "This is a placeholder MQTT device"
+  labels: 
+    - "mqtt"
+    - "BEAVER"
+  protocols:
+    mqtt:
+      CommandTopic: "command/pmu3"
+      ResponseTopic: "commandresponses/"
+- name: "pmu4"
+  profileName: "Profile-MQTT"
+  description: "This is a placeholder MQTT device"
+  labels: 
+    - "mqtt"
+    - "BEAVER"
+  protocols:
+    mqtt:
+      CommandTopic: "command/pmu4"
+      ResponseTopic: "commandresponses/"
+- name: "pmu5"
+  profileName: "Profile-MQTT"
+  description: "This is a placeholder MQTT device"
+  labels: 
+    - "mqtt"
+    - "BEAVER"
+  protocols:
+    mqtt:
+      CommandTopic: "command/pmu5"
+      ResponseTopic: "commandresponses/"
