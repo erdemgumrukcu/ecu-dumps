@@ -293,8 +293,6 @@ services:
     platform: linux/arm64
     networks:
       edgex-network: null
-      modbus-l2:
-        ipv4_address: 169.254.84.31   # choose an unused IP on eth0 subnet
     ports:
       - mode: ingress
         host_ip: 127.0.0.1
@@ -339,10 +337,3 @@ volumes:
 networks:
   edgex-network:
     name: edgex_edgex-network
-  modbus-l2:
-    driver: macvlan
-    driver_opts:
-      parent: eth0
-    ipam:
-      config:
-        - subnet: 169.254.84.0/24
