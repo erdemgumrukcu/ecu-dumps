@@ -12,4 +12,4 @@ deviceList:
         Host: '169.254.84.30'
         Port: '443'
         Path: 'api/data/v2/points'
-        Scheme: "https"
+        Scheme: 'https'
