@@ -325,8 +325,6 @@ services:
           create_host_path: true
 
   device-rest:
-    build:
-      context: ./device-rest-custom
     command:
       - -cp=keeper.http://edgex-core-keeper:59890
       - --registry
@@ -353,7 +351,7 @@ services:
       DEVICE_PROFILESDIR: /custom-config/profiles
       WRITABLE_LOGLEVEL: DEBUG
     hostname: edgex-device-rest
-    image: device-rest-custom-arm64:local
+    image: nexus3.edgexfoundry.org:10004/device-rest-arm64:latest
     platform: linux/arm64
     networks:
       edgex-network:
