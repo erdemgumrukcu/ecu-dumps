@@ -297,7 +297,7 @@ services:
       edgex-network:
         aliases:
           - edgex-device-modbus-bridge
-      modbus-macvlan:
+      macvlan:
         ipv4_address: 169.254.84.11
     ports:
       - mode: ingress
@@ -319,6 +319,66 @@ services:
           create_host_path: true
       - type: bind
         source: ./config-modbus
+        target: /custom-config
+        read_only: true
+        bind:
+          create_host_path: true
+
+  device-rest:
+    command:
+      - -cp=keeper.http://edgex-core-keeper:59890
+      - --registry
+    container_name: edgex-device-rest
+    depends_on:
+      core-common-config-bootstrapper:
+        condition: service_started
+        required: true
+      core-keeper:
+        condition: service_started
+        required: true
+      core-data:
+        condition: service_started
+        required: true
+      core-metadata:
+        condition: service_started
+        required: true
+    environment:
+      EDGEX_SECURITY_SECRET_STORE: "false"
+      SERVICE_HOST: edgex-device-rest-bridge
+      SERVICE_SERVERBINDADDR: edgex-device-rest-bridge
+      SERVICE_PORT: "59986"
+      DEVICE_DEVICESDIR: /custom-config/devices
+      DEVICE_PROFILESDIR: /custom-config/profiles
+      WRITABLE_LOGLEVEL: DEBUG
+    hostname: edgex-device-rest
+    image: nexus3.edgexfoundry.org:10004/device-rest-arm64:latest
+    platform: linux/arm64
+    networks:
+      edgex-network:
+        aliases:
+          - edgex-device-rest-bridge
+      macvlan:
+        ipv4_address: 169.254.84.12
+    ports:
+      - mode: ingress
+        host_ip: 127.0.0.1
+        target: 59986
+        published: "59986"
+        protocol: tcp
+    read_only: true
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    user: 2002:2001
+    volumes:
+      - type: bind
+        source: /etc/localtime
+        target: /etc/localtime
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: ./config-rest
         target: /custom-config
         read_only: true
         bind:
@@ -362,8 +422,8 @@ networks:
   edgex-network:
     name: edgex_edgex-network
 
-  modbus-macvlan:
-    name: edgex_modbus-macvlan
+  macvlan:
+    name: edgex_macvlan
     driver: macvlan
     driver_opts:
       parent: eth0

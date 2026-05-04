@@ -1,0 +1,18 @@
+MaxEventSize: 0 # value 0 unlimit the maximum event size that can be sent to message bus or core-data
+
+Writable:
+  LogLevel: INFO
+
+Service:
+  Host: localhost
+  Port: 59986
+  StartupMsg: device rest started
+
+MessageBus:
+  Optional:
+    ClientId: device-rest
+
+Device:
+  # These have common values (currently), but must be here for service local env overrides to apply when customized
+  ProfilesDir: "./custom-config/profiles"
+  DevicesDir: "./custom-config/devices"

@@ -1,0 +1,25 @@
+name: "Profile-REST-SMP4250"
+manufacturer: BEAVER
+description: BEAVER REST
+labels:
+- REST
+- BEAVER
+- SMP4250
+deviceResources:
+- name: plc_Q_OUTPUT
+  isHidden: false
+  description: REST payload from IP_ADDR/api/data/v2/points/plc_Q_OUTPUT
+  attributes:
+    path: data/v2/points/plc_Q_OUTPUT
+    method: GET
+  properties:
+    valueType: Object
+    readWrite: R
+    mediaType: application/json
+
+deviceCommands:
+- name: ReadPlcQOutput
+  readWrite: R
+  isHidden: false
+  resourceOperations:
+    - deviceResource: plc_Q_OUTPUT

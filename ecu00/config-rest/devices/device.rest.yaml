@@ -1,0 +1,15 @@
+# Pre-define Devices
+deviceList:
+  - name: "Device-REST-SMP4250"
+    profileName: "Profile-REST-SMP4250"
+    description: "This is a REST device running in SMP4250"
+    labels:
+      - "rest"
+      - "BEAVER"
+      - "SMP4250"
+    protocols:
+      REST:
+        Host: '169.254.84.30'
+        Port: '443'
+        Path: 'api'
+        Scheme: 'https'
