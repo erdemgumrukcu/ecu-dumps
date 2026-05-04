@@ -1,6 +1,4 @@
-FROM golang:1.25-alpine AS builder
-
-RUN apk add --no-cache git build-base ca-certificates
+FROM golang:1.25 AS builder
 
 WORKDIR /src
 RUN git clone --depth 1 --branch v4.0.1 https://github.com/edgexfoundry/device-rest-go.git .
