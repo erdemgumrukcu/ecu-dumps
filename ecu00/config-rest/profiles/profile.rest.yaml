@@ -6,7 +6,7 @@ labels:
 - BEAVER
 - SMP4250
 deviceResources:
-- name: plc_Q_OUTPUT
+- name: data/v2/points/plc_Q_OUTPUT
   isHidden: false
   description: REST payload from IP_ADDR/api/data/v2/points/plc_Q_OUTPUT
   attributes:
@@ -22,4 +22,4 @@ deviceCommands:
   readWrite: R
   isHidden: false
   resourceOperations:
-    - deviceResource: plc_Q_OUTPUT
+    - deviceResource: data/v2/points/plc_Q_OUTPUT
