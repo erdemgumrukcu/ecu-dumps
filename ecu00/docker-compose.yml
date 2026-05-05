@@ -357,8 +357,6 @@ services:
       edgex-network:
         aliases:
           - edgex-device-rest-bridge
-      macvlan:
-        ipv4_address: 169.254.84.12
     ports:
       - mode: ingress
         host_ip: 127.0.0.1
@@ -384,23 +382,37 @@ services:
         bind:
           create_host_path: true
 
-  ui:
-    container_name: edgex-ui-go
-    environment:
-      EDGEX_SECURITY_SECRET_STORE: "false"
-      SERVICE_HOST: edgex-ui-go
-    hostname: edgex-ui-go
-    image: nexus3.edgexfoundry.org:10004/edgex-ui-arm64:latest
-    networks:
-      edgex-network: null
+  rest-https-proxy:
+    container_name: edgex-rest-https-proxy
+    depends_on:
+      device-rest:
+        condition: service_started
+        required: true
+    hostname: edgex-rest-https-proxy
+    image: nginx:1.27-alpine
     platform: linux/arm64
-    ports:
-      - mode: ingress
-        target: 4000
-        published: "4000"
-        protocol: tcp
-    read_only: true
-    restart: unless-stopped
+    networks:
+      edgex-network:
+        aliases:
+          - nginx-rest-proxy
+      macvlan:
+        ipv4_address: 169.254.84.13
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - type: bind
+        source: /etc/localtime
+        target: /etc/localtime
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: ./config-rest/nginx/default.conf
+        target: /etc/nginx/conf.d/default.conf
+        read_only: true
+        bind:
+          create_host_path: true
 
 volumes:
   consul-config:

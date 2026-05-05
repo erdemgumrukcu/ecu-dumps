@@ -9,7 +9,7 @@ deviceList:
       - "SMP4250"
     protocols:
       REST:
-        Host: '169.254.84.30'
-        Port: '443'
+        Host: 'nginx-rest-proxy'
+        Port: '8080'
         Path: 'api/data/v2/points'
-        Scheme: 'https'
+        Scheme: 'http'
