@@ -391,6 +391,8 @@ services:
     hostname: edgex-rest-https-proxy
     image: nginx:1.27-alpine
     platform: linux/arm64
+    environment:
+      REST_PROXY_BASIC_AUTH: ${REST_PROXY_BASIC_AUTH}
     networks:
       edgex-network:
         aliases:
@@ -409,7 +411,7 @@ services:
           create_host_path: true
       - type: bind
         source: ./config-rest/nginx/default.conf
-        target: /etc/nginx/conf.d/default.conf
+        target: /etc/nginx/templates/default.conf.template
         read_only: true
         bind:
           create_host_path: true
