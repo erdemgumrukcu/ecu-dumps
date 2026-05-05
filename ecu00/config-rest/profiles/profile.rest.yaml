@@ -8,9 +8,19 @@ labels:
 deviceResources:
 - name: plc_Q_OUTPUT
   isHidden: false
-  description: REST payload from IP_ADDR/api/data/v2/points/plc_Q_OUTPUT
+  description: REST payload from SMP_ADDRESS/api/data/v2/points/plc_Q_OUTPUT
   attributes:
     path: plc_Q_OUTPUT
+    method: GET
+  properties:
+    valueType: Object
+    readWrite: R
+    mediaType: application/json
+- name: plc_Q_INPUT
+  isHidden: false
+  description: REST payload from SMP_ADDRESS/api/data/v2/points/plc_Q_INPUT
+  attributes:
+    path: plc_Q_INPUT
     method: GET
   properties:
     valueType: Object
