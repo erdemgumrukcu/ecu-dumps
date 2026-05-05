@@ -1,8 +1,8 @@
 # Pre-define Devices
 deviceList:
-  - name: "Device-REST-SMP4250"
+  - name: "Device-REST-SMP4250-1"
     profileName: "Profile-REST-SMP4250"
-    description: "This is a REST device running in SMP4250"
+    description: "This is the 1st REST device running in SMP4250"
     labels:
       - "rest"
       - "BEAVER"
@@ -10,6 +10,19 @@ deviceList:
     protocols:
       REST:
         Host: 'nginx-rest-proxy'
-        Port: '8080'
+        Port: '8081'
+        Path: 'api/data/v2/points'
+        Scheme: 'http'
+  - name: "Device-REST-SMP4250-2"
+    profileName: "Profile-REST-SMP4250"
+    description: "This is the 2nd REST device running in SMP4250"
+    labels:
+      - "rest"
+      - "BEAVER"
+      - "SMP4250"
+    protocols:
+      REST:
+        Host: 'nginx-rest-proxy'
+        Port: '8082'
         Path: 'api/data/v2/points'
         Scheme: 'http'
