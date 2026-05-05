@@ -13,5 +13,6 @@ deviceResources:
     path: plc_Q_OUTPUT
     method: GET
   properties:
-    valueType: String
+    valueType: Object
     readWrite: R
+    mediaType: application/json
