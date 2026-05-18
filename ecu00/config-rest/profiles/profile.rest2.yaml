@@ -1,4 +1,4 @@
-name: "Profile-REST-SMP4250"
+name: "Profile-REST-SMP4250-2"
 manufacturer: BEAVER
 description: BEAVER REST
 labels:
@@ -6,21 +6,21 @@ labels:
 - BEAVER
 - SMP4250
 deviceResources:
-- name: plc_hems1_p_upper
+- name: plc_hems2_p_upper
   isHidden: false
-  description: REST payload from SMP_ADDRESS/api/data/v2/points/plc_hems1_p_upper
+  description: REST payload from SMP_ADDRESS/api/data/v2/points/plc_hems2_p_upper
   attributes:
-    path: plc_hems1_p_upper
+    path: plc_hems2_p_upper
     method: GET
   properties:
     valueType: Object
     readWrite: R
     mediaType: application/json
-- name: plc_hems1_p_lower
+- name: plc_hems2_p_lower
   isHidden: false
-  description: REST payload from SMP_ADDRESS/api/data/v2/points/plc_hems1_p_lower
+  description: REST payload from SMP_ADDRESS/api/data/v2/points/plc_hems2_p_lower
   attributes:
-    path: plc_hems1_p_lower
+    path: plc_hems2_p_lower
     method: GET
   properties:
     valueType: Object

@@ -1,7 +1,7 @@
 # Pre-define Devices
 deviceList:
   - name: "Device-REST-SMP4250-1"
-    profileName: "Profile-REST-SMP4250"
+    profileName: "Profile-REST-SMP4250-1"
     description: "This is the 1st REST device running in SMP4250"
     labels:
       - "rest"
@@ -14,7 +14,7 @@ deviceList:
         Path: 'api/data/v2/points'
         Scheme: 'http'
   - name: "Device-REST-SMP4250-2"
-    profileName: "Profile-REST-SMP4250"
+    profileName: "Profile-REST-SMP4250-2"
     description: "This is the 2nd REST device running in SMP4250"
     labels:
       - "rest"
