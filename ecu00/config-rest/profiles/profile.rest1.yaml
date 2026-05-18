@@ -26,3 +26,23 @@ deviceResources:
     valueType: Object
     readWrite: R
     mediaType: application/json
+- name: plc_hems1_p_now
+  isHidden: false
+  description: REST payload from SMP_ADDRESS/api/data/v2/points/plc_hems1_p_now
+  attributes:
+    path: plc_hems1_p_now
+    method: GET
+  properties:
+    valueType: Object
+    readWrite: R
+    mediaType: application/json
+- name: plc_hems1_p_ref
+  isHidden: false
+  description: REST payload to SMP_ADDRESS/api/data/v2/points/plc_hems1_p_ref
+  attributes:
+    path: plc_hems1_p_ref
+    method: PUT
+  properties:
+    valueType: Object
+    readWrite: W
+    mediaType: application/json
