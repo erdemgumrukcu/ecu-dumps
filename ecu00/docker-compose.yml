@@ -13,6 +13,7 @@ services:
       - HEMS_READ_PATH_P_LB= http://edgex-core-command:59882/api/v3/device/name/Device-REST-SMP4250-1/plc_HEMS_P_LB
       - HEMS_WRITE_PATH_P_REF_OUTPUT= http://edgex-core-command:59882/api/v3/device/name/Device-REST-SMP4250-1/plc_HEMS_P_REF_OUTPUT
       - CONTROL_REFRESH_INTERVAL_SECONDS=60
+      - TRANSFORMER_LIMIT=40
       - PYTHONUNBUFFERED=1
     depends_on:
       core-command:
