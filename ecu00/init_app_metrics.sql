@@ -11,5 +11,5 @@ CREATE TABLE IF NOT EXISTS app_metrics (
 );
 
 INSERT INTO app_metrics(metric_key, metric_value, unit, status, updated_at, source)
-VALUES ('flex_power', 1000, 'kW', 'OK', NOW(), 'init')
+VALUES ('pow_limit', 50, 'kW', 'OK', NOW(), 'init')
 ON CONFLICT (metric_key) DO NOTHING;

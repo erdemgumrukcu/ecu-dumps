@@ -1,5 +1,58 @@
 name: EdgeiSMP-ECU150
 services:
+
+  app-fm:
+    build:
+      context: ./application-fm
+    container_name: app-fm
+    hostname: app-fm
+    platform: linux/arm64
+    environment:
+      - LOAD_SENSOR_READ_PATH= http://edgex-core-command:59882/api/v3/device/name/Device-Modbus-SMP4250/plc_P
+      - HEMS_READ_PATH_P_NOW= http://edgex-core-command:59882/api/v3/device/name/Device-REST-SMP4250-1/plc_HEMS_P_NOW
+      - HEMS_READ_PATH_P_UB= http://edgex-core-command:59882/api/v3/device/name/Device-REST-SMP4250-1/plc_HEMS_P_UB
+      - HEMS_READ_PATH_P_LB= http://edgex-core-command:59882/api/v3/device/name/Device-REST-SMP4250-1/plc_HEMS_P_LB
+      - HEMS_WRITE_PATH_P_REF_OUTPUT= http://edgex-core-command:59882/api/v3/device/name/Device-REST-SMP4250-1/plc_HEMS_P_REF_OUTPUT
+      - CONTROL_REFRESH_INTERVAL_SECONDS=60
+      - DB_HOST=edgex-postgres
+      - DB_PORT=5432
+      - DB_NAME=edgex_db
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - PYTHONUNBUFFERED=1
+      - CLOCK_SYNC_MAX_SKEW_SECONDS=2.0
+    depends_on:
+      core-command:
+        condition: service_started
+        required: true
+      core-data:
+        condition: service_started
+        required: true
+      core-metadata:
+        condition: service_started
+        required: true
+      mqtt-broker:
+        condition: service_started
+        required: true
+      device-rest:
+        condition: service_started
+        required: true
+      device-modbus:
+        condition: service_started
+        required: true
+      database:
+        condition: service_started
+        required: true
+    networks:
+      edgex-network: null
+    volumes:
+      - type: bind
+        source: /etc/localtime
+        target: /etc/localtime
+        read_only: true
+        bind:
+          create_host_path: true
+
   core-command:
     command:
       - --registry
