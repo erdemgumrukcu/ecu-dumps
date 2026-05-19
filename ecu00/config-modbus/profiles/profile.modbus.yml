@@ -6,19 +6,9 @@ labels:
   - "BEAVER"
 deviceResources:
   -
-    name: "pmu1_p"
+    name: "trafo_p"
     isHidden: false
     description: "Resource available in Modbus holding register 0"
-    attributes:
-      { primaryTable: "HOLDING_REGISTERS", startingAddress: 0, rawType: "Int16" }
-    properties:
-      valueType: "Float32"
-      readWrite: "RW"
-      scale: 1.0
-  -
-    name: "pmu1_q"
-    isHidden: false
-    description: "Resource available in Modbus holding register 16"
     attributes:
       { primaryTable: "HOLDING_REGISTERS", startingAddress: 16, rawType: "Int16" }
     properties:
@@ -26,21 +16,11 @@ deviceResources:
       readWrite: "RW"
       scale: 1.0
   -
-    name: "pmu2_p"
+    name: "trafo_q"
     isHidden: false
-    description: "Resource available in Modbus holding register 32"
+    description: "Resource available in Modbus holding register 16"
     attributes:
-      { primaryTable: "HOLDING_REGISTERS", startingAddress: 32, rawType: "Int16" }
-    properties:
-      valueType: "Float32"
-      readWrite: "RW"
-      scale: 1.0
-  -
-    name: "pmu2_q"
-    isHidden: false
-    description: "Resource available in Modbus holding register 48"
-    attributes:
-      { primaryTable: "HOLDING_REGISTERS", startingAddress: 48, rawType: "Int16" }
+      { primaryTable: "HOLDING_REGISTERS", startingAddress: 0, rawType: "Int16" }
     properties:
       valueType: "Float32"
       readWrite: "RW"
@@ -53,7 +33,5 @@ deviceCommands:
     readWrite: "R"
     isHidden: false
     resourceOperations:
-      - { deviceResource: "pmu1_p" }
-      - { deviceResource: "pmu1_q" }
-      - { deviceResource: "pmu2_p" }
-      - { deviceResource: "pmu2_q" }
+      - { deviceResource: "trafo_p" }
+      - { deviceResource: "trafo_q" }
