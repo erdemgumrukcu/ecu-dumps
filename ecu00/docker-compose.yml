@@ -7,7 +7,7 @@ services:
     hostname: app-fm
     platform: linux/arm64
     environment:
-      - LOAD_SENSOR_READ_PATH= http://edgex-core-command:59882/api/v3/device/name/Device-Modbus-SMP4250/plc_P
+      - LOAD_SENSOR_READ_PATH= http://edgex-core-command:59882/api/v3/device/name/Device-Modbus-SMP4250/trafo_p
       - HEMS_READ_PATH_P_NOW= http://edgex-core-command:59882/api/v3/device/name/Device-REST-SMP4250-1/plc_HEMS_P_NOW
       - HEMS_READ_PATH_P_UB= http://edgex-core-command:59882/api/v3/device/name/Device-REST-SMP4250-1/plc_HEMS_P_UB
       - HEMS_READ_PATH_P_LB= http://edgex-core-command:59882/api/v3/device/name/Device-REST-SMP4250-1/plc_HEMS_P_LB
