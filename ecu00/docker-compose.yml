@@ -2,8 +2,7 @@ name: EdgeiSMP-ECU150
 services:
 
   app-fm:
-    build:
-      context: ./application-fm
+    image: ghcr.io/etn-electrical/beaver/application-fm:latest
     container_name: app-fm
     hostname: app-fm
     platform: linux/arm64
