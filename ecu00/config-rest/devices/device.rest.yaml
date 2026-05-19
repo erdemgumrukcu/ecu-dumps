@@ -13,16 +13,3 @@ deviceList:
         Port: '8081'
         Path: 'api/data/v2/points'
         Scheme: 'http'
-  - name: "Device-REST-SMP4250-2"
-    profileName: "Profile-REST-SMP4250-2"
-    description: "This is the 2nd REST device running in SMP4250"
-    labels:
-      - "rest"
-      - "BEAVER"
-      - "SMP4250"
-    protocols:
-      REST:
-        Host: 'nginx-rest-proxy'
-        Port: '8082'
-        Path: 'api/data/v2/points'
-        Scheme: 'http'
