@@ -249,7 +249,7 @@ def main():
         if realtime_sensor_data and realtime_limit_data and realtime_hems_data:
             print("Control algorithm...")            
             p_ref=run_control_algorithm(rt_load_trafo, TRANSFORMER_LIMIT_STATE["pow_limit"], hems_p_now,hems_p_ub, hems_p_lb)
-
+            print("HEMS p_ref:", p_ref)
         else:
             print("Using old data.")
         print()
