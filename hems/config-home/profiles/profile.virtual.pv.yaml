@@ -13,14 +13,14 @@ deviceResources:
     properties:
       valueType: "Float64"
       readWrite: "RW"
-      defaultValue: "6.0"
+      defaultValue: 6.0
   - name: "ReactivePower"
     isHidden: false
     description: "HOME Emulator PV Virtual Device — Reactive Power."
     properties:
       valueType: "Float64"
       readWrite: "RW"
-      defaultValue: "0.0"
+      defaultValue: 0.0
 deviceCommands:
   - name: "ReadAll"
     isHidden: false

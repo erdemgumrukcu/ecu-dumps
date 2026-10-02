@@ -13,42 +13,42 @@ deviceResources:
     properties:
       valueType: "Float64"
       readWrite: "RW"
-      defaultValue: "11.0"
+      defaultValue: 11.0
   - name: "ReactivePower"
     isHidden: false
     description: "HOME Emulator Electric Vehicle Charger Virtual Device — Reactive Power."
     properties:
       valueType: "Float64"
       readWrite: "RW"
-      defaultValue: "0.0"
+      defaultValue: 0.0
   - name: "BatterySOC"
     isHidden: false
     description: "HOME Emulator Electric Vehicle Charger Virtual Device — State of Charge."
     properties:
       valueType: "Float64"
       readWrite: "RW"
-      defaultValue: "0.5"
+      defaultValue: 0.5
   - name: "BatteryCapacity"
     isHidden: false
     description: "HOME Emulator Electric Vehicle Charger Virtual Device — Battery Capacity."
     properties:
       valueType: "Float64"
       readWrite: "RW"
-      defaultValue: "50.0"
+      defaultValue: 50.0
   - name: "BatteryMaxChargingPower"
     isHidden: false
     description: "HOME Emulator Electric Vehicle Charger Virtual Device — Battery Maximum Charging Power."
     properties:
       valueType: "Float64"
       readWrite: "RW"
-      defaultValue: "11.0"
+      defaultValue: 11.0
   - name: "BatteryMaxDischargingPower"
     isHidden: false
     description: "HOME Emulator Electric Vehicle Charger Virtual Device — Battery Maximum Discharging Power."
     properties:
       valueType: "Float64"
       readWrite: "RW"
-      defaultValue: "11.0"
+      defaultValue: 11.0
 deviceCommands:
   - name: "ReadAll"
     isHidden: false
