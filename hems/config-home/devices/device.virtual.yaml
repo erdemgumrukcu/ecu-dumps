@@ -1,0 +1,45 @@
+deviceList:
+  - name: "Load"
+    profileName: "Profile-Load"
+    description: "HEMS Emulator Load Virtual Device."
+    labels:
+      - "virtual"
+      - "BEAVER"
+      - "HEMS"
+    protocols:
+      other:
+        Address: "virtual-load"
+        Port: "3101"
+  - name: "PV"
+    profileName: "Profile-PV"
+    description: "HEMS Emulator PV Virtual Device."
+    labels:
+      - "virtual"
+      - "BEAVER"
+      - "HEMS"
+    protocols:
+      other:
+        Address: "virtual-pv"
+        Port: "3102"
+  - name: "Battery"
+    profileName: "Profile-Battery"
+    description: "HEMS Emulator Battery Virtual Device."
+    labels:
+      - "virtual"
+      - "BEAVER"
+      - "HEMS"
+    protocols:
+      other:
+        Address: "virtual-battery"
+        Port: "3103"
+  - name: "EVC"
+    profileName: "Profile-EVC"
+    description: "HEMS Emulator Electric Vehicle Charger Virtual Device."
+    labels:
+      - "virtual"
+      - "BEAVER"
+      - "HEMS"
+    protocols:
+      other:
+        Address: "virtual-evc"
+        Port: "3104"

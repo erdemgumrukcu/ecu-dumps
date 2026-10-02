@@ -1,0 +1,63 @@
+name: "Profile-Battery"
+manufacturer: "BEAVER"
+description: "HOME Emulator Battery Virtual Device."
+model: "Virtual-Battery"
+labels:
+  - "virtual"
+  - "BEAVER"
+  - "HEMS"
+deviceResources:
+  - name: "ActivePower"
+    isHidden: false
+    description: "HOME Emulator Battery Virtual Device — Active Power."
+    properties:
+      valueType: "Float64"
+      readWrite: "RW"
+      defaultValue: "0.0"
+  - name: "ReactivePower"
+    isHidden: false
+    description: "HOME Emulator Battery Virtual Device — Reactive Power."
+    properties:
+      valueType: "Float64"
+      readWrite: "RW"
+      defaultValue: "0.0"
+  - name: "BatterySOC"
+    isHidden: false
+    description: "HOME Emulator Battery Virtual Device — State of Charge."
+    properties:
+      valueType: "Float64"
+      readWrite: "RW"
+      defaultValue: "0.5"
+  - name: "BatteryCapacity"
+    isHidden: false
+    description: "HOME Emulator Battery Virtual Device — Battery Capacity."
+    properties:
+      valueType: "Float64"
+      readWrite: "RW"
+      defaultValue: "10.0"
+  - name: "BatteryMaxChargingPower"
+    isHidden: false
+    description: "HOME Emulator Battery Virtual Device — Battery Maximum Charging Power."
+    properties:
+      valueType: "Float64"
+      readWrite: "RW"
+      defaultValue: "5.0"
+  - name: "BatteryMaxDischargingPower"
+    isHidden: false
+    description: "HOME Emulator Battery Virtual Device — Battery Maximum Discharging Power."
+    properties:
+      valueType: "Float64"
+      readWrite: "RW"
+      defaultValue: "5.0"
+deviceCommands:
+  - name: "ReadAll"
+    isHidden: false
+    description: "Read-only collection of all HOME Emulator Battery Virtual Device resources"
+    readWrite: "R"
+    resourceOperations:
+      - { deviceResource: "ActivePower" }
+      - { deviceResource: "ReactivePower" }
+      - { deviceResource: "BatterySOC" }
+      - { deviceResource: "BatteryCapacity" }
+      - { deviceResource: "BatteryMaxChargingPower" }
+      - { deviceResource: "BatteryMaxDischargingPower" }

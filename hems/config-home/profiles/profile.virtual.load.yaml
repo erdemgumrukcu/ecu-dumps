@@ -1,0 +1,31 @@
+name: "Profile-Load"
+manufacturer: "BEAVER"
+description: "HOME Emulator Load Virtual Device."
+model: "Virtual-Load"
+labels:
+  - "virtual"
+  - "BEAVER"
+  - "HEMS"
+deviceResources:
+  - name: "ActivePower"
+    isHidden: false
+    description: "HOME Emulator Load Virtual Device — Active Power."
+    properties:
+      valueType: "Float64"
+      readWrite: "RW"
+      defaultValue: "4.0"
+  - name: "ReactivePower"
+    isHidden: false
+    description: "HOME Emulator Load Virtual Device — Reactive Power."
+    properties:
+      valueType: "Float64"
+      readWrite: "RW"
+      defaultValue: "0.0"
+deviceCommands:
+  - name: "ReadAll"
+    isHidden: false
+    description: "Read-only collection of all HOME Emulator Load Virtual Device resources"
+    readWrite: "R"
+    resourceOperations:
+      - { deviceResource: "ActivePower" }
+      - { deviceResource: "ReactivePower" }
