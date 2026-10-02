@@ -204,6 +204,10 @@ services:
         bind:
           create_host_path: true
   mqtt-broker:
+    command:
+      - /usr/sbin/mosquitto
+      - -c
+      - /mosquitto-no-auth.conf
     container_name: edgex-mqtt-broker
     hostname: edgex-mqtt-broker
     image: eclipse-mosquitto:2.0.18
