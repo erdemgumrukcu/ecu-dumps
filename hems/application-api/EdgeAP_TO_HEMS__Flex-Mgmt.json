@@ -1,0 +1,22 @@
+{
+  "sourceDevice": {
+    "deviceId": "ISMP-045-A",
+    "deviceType": "EdgeISMPController"
+  },
+  
+  "targetDevice": {
+    "deviceId": "HEMS-102938",
+    "deviceType": "HomeEnergyManagementSystem"
+  },
+
+  "messageType": "flexibilityRequest",
+
+  "isPreliminary": true,
+  "controlReason": "voltageSupport",
+  "controlStart": "2026-04-27T15:15:00Z",
+  "controlDuration": 900,
+  "timestamp": "2026-04-27T15:14:00Z",
+  "activePowerReco": 3.5,
+  "unit": "kW",
+  "requestID": "ISMP-045-A-2026-04-27T15:15:00"
+}

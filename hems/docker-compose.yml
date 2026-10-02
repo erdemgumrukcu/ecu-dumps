@@ -1,6 +1,24 @@
 name: hems
 services:
 
+  application-api:
+    build: ./application-api
+    platform: linux/arm64
+    depends_on:
+      core-command:
+        condition: service_started
+    environment:
+      CORE_COMMAND_URL: http://edgex-core-command:59882
+    networks:
+      edgex-network: null
+    ports:
+      - mode: ingress
+        host_ip: 0.0.0.0
+        target: 8000
+        published: "8000"
+        protocol: tcp
+    restart: always
+
   core-command:
     command:
       - --registry

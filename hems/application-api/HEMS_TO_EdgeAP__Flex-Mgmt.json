@@ -1,0 +1,30 @@
+{
+  "sourceDevice": {
+    "deviceId": "HEMS-102938",
+    "deviceType": "HomeEnergyManagementSystem"
+  },
+  
+  "targetDevice": {
+    "deviceId": "ISMP-045-A",
+    "deviceType": "EdgeISMPController"
+  },
+
+  "timestamp": "2026-04-27T15:14:35",
+
+  "flexibilityResponse":{
+    "requestId": "ISMP-045-A-2026-04-27T15:15:00",
+    "responseStatus": "ACCEPTED",
+    "activePowerActual": 3.5,
+    "unit": "kW"
+  },
+
+  "flexibilityInfo":{
+    "infoId": "HEMS-102938-2026-04-27T15:30:00",
+    "controlStart": "2026-04-27T15:30:00",
+    "controlDuration": 900,
+    "activePowerMax": 11,
+    "activePowerMin": -5,
+    "activePowerEst": 8,
+    "unit": "kW"
+}
+}
