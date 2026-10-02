@@ -2,7 +2,9 @@ name: hems
 services:
 
   application-api:
-    build: ./application-api
+    build:
+      context: ./application-api
+      network: host
     platform: linux/arm64
     depends_on:
       core-command:
