@@ -43,6 +43,12 @@ deviceResources:
     properties:
       valueType: "Float64"
       readWrite: "RW"
+  - name: "ActivePowerSetpoint"
+    isHidden: false
+    description: "HOME Emulator Electric Vehicle Charger Virtual Device — Active Power Setpoint."
+    properties:
+      valueType: "Float64"
+      readWrite: "RW"
 deviceCommands:
   - name: "ReadAll"
     isHidden: false
@@ -55,3 +61,4 @@ deviceCommands:
       - { deviceResource: "BatteryCapacity" }
       - { deviceResource: "BatteryMaxChargingPower" }
       - { deviceResource: "BatteryMaxDischargingPower" }
+      - { deviceResource: "ActivePowerSetpoint" }

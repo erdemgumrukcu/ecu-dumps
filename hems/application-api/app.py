@@ -18,8 +18,8 @@ def receive_flexibility_request():
 
     try:
         response = requests.put(
-            f"{CORE_COMMAND_URL}/api/v3/device/name/Battery/ActivePower",
-            json={"ActivePower": value},
+            f"{CORE_COMMAND_URL}/api/v3/device/name/Battery/ActivePowerSetpoint",
+            json={"ActivePowerSetpoint": value},
             timeout=10,
         )
         response.raise_for_status()
@@ -28,7 +28,7 @@ def receive_flexibility_request():
     except requests.exceptions.RequestException:
         return jsonify(error="Core Command is unavailable"), 503
 
-    return jsonify(device="Battery", resource="ActivePower", value=value)
+    return jsonify(device="Battery", resource="ActivePowerSetpoint", value=value)
 
 
 @app.get("/api/v1/devices/<device>/<resource>")
