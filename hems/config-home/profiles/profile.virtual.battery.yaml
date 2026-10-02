@@ -13,42 +13,36 @@ deviceResources:
     properties:
       valueType: "Float64"
       readWrite: "RW"
-      defaultValue: 0.0
   - name: "ReactivePower"
     isHidden: false
     description: "HOME Emulator Battery Virtual Device — Reactive Power."
     properties:
       valueType: "Float64"
       readWrite: "RW"
-      defaultValue: 0.0
   - name: "BatterySOC"
     isHidden: false
     description: "HOME Emulator Battery Virtual Device — State of Charge."
     properties:
       valueType: "Float64"
       readWrite: "RW"
-      defaultValue: 0.5
   - name: "BatteryCapacity"
     isHidden: false
     description: "HOME Emulator Battery Virtual Device — Battery Capacity."
     properties:
       valueType: "Float64"
       readWrite: "RW"
-      defaultValue: 50.0
   - name: "BatteryMaxChargingPower"
     isHidden: false
     description: "HOME Emulator Battery Virtual Device — Battery Maximum Charging Power."
     properties:
       valueType: "Float64"
       readWrite: "RW"
-      defaultValue: 5.0
   - name: "BatteryMaxDischargingPower"
     isHidden: false
     description: "HOME Emulator Battery Virtual Device — Battery Maximum Discharging Power."
     properties:
       valueType: "Float64"
       readWrite: "RW"
-      defaultValue: 5.0
 deviceCommands:
   - name: "ReadAll"
     isHidden: false
