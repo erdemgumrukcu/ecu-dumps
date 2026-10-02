@@ -282,7 +282,7 @@ services:
     hostname: home-assets
     image: nexus3.edgexfoundry.org:10004/device-virtual-arm64:latest
     networks:
-      edge-network: null
+      edgex-network: null
     ports:
       - mode: ingress
         host_ip: 127.0.0.1
@@ -333,7 +333,6 @@ volumes:
 networks:
   edgex-network:
     name: edgex_edgex-network
-
   macvlan:
     name: edgex_macvlan
     driver: macvlan
