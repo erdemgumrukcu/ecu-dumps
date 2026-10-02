@@ -333,7 +333,6 @@ volumes:
 networks:
   edgex-network:
     name: edgex_edgex-network
-    driver: bridge
 
   macvlan:
     name: edgex_macvlan
