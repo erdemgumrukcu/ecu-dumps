@@ -7,7 +7,7 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 CORE_COMMAND_URL = os.environ.get("CORE_COMMAND_URL", "http://edgex-core-command:59882").rstrip("/")
-DEVICE_READ_PATHS = {
+FLEX_ASSET_PARAM_PATHS = {
     device: {
         resource: os.environ.get(
             f"{device.upper()}_{suffix}_PATH",
@@ -22,6 +22,11 @@ DEVICE_READ_PATHS = {
     for device in ("Battery", "EVC")
 }
 
+for device, resources in FLEX_ASSET_PARAM_PATHS.items():
+    for resource, path in resources.items():
+        if not path.startswith("/") or path.startswith("//"):
+            raise ValueError(f"{device}/{resource} path must start with a single '/'")
+
 
 def read_core_command_value(path, resource):
     response = requests.get(f"{CORE_COMMAND_URL}{path}", timeout=10)
@@ -31,20 +36,11 @@ def read_core_command_value(path, resource):
     return float(reading["value"])
 
 
-def create_app():
-    """Validate configured paths without contacting Core Command."""
-    for device, resources in DEVICE_READ_PATHS.items():
-        for resource, path in resources.items():
-            if not path.startswith("/") or path.startswith("//"):
-                raise ValueError(f"{device}/{resource} path must start with a single '/'")
-    return app
-
-
 @app.get("/api/v1/devices/readings")
 def read_device_values():
     snapshot = {}
     try:
-        for device, resources in DEVICE_READ_PATHS.items():
+        for device, resources in FLEX_ASSET_PARAM_PATHS.items():
             snapshot[device] = {}
             for resource, path in resources.items():
                 value = read_core_command_value(path, resource)
