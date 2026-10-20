@@ -36,8 +36,8 @@ def read_core_command_value(path, resource):
     return float(reading["value"])
 
 
-@app.get("/api/v1/devices/readings")
-def read_device_values():
+@app.get("/api/v1/flexdevices/capacityparameters")
+def read_parameters():
     snapshot = {}
     try:
         for device, resources in FLEX_ASSET_PARAM_PATHS.items():
