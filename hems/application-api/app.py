@@ -50,7 +50,7 @@ def read_core_command_value(path, resource):
 def read_parameters():
     snapshot = {}
     try:
-        for device, resources in RT_ACTIVE_POWER_PATHS.items():
+        for device, resources in FLEX_ASSET_PARAM_PATHS.items():
             snapshot[device] = {}
             for resource, path in resources.items():
                 value = read_core_command_value(path, resource)
@@ -73,7 +73,7 @@ def read_parameters():
 def read_active_power():
     snapshot = {}
     try:
-        for device, resources in FLEX_ASSET_PARAM_PATHS.items():
+        for device, resources in RT_ACTIVE_POWER_PATHS.items():
             if "ActivePower" in resources:
                 path = resources["ActivePower"]
                 value = read_core_command_value(path, "ActivePower")
