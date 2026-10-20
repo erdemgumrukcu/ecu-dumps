@@ -27,7 +27,7 @@ write_value Battery BatteryCapacity 10.0
 write_value Battery BatteryMaxChargingPower 5.0
 write_value Battery BatteryMaxDischargingPower 5.0
 
-write_value EVC ActivePower 0.0
+write_value EVC ActivePower 11.0
 write_value EVC ReactivePower 0.0
 write_value EVC BatterySOC 0.5
 write_value EVC BatteryCapacity 50.0
