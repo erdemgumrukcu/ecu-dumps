@@ -22,6 +22,16 @@ FLEX_ASSET_PARAM_PATHS = {
     for device in ("Battery", "EVC")
 }
 
+RT_ACTIVE_POWER_PATHS= {
+    device: {
+        "ActivePower": os.environ.get(
+            f"{device.upper()}_ACTIVE_POWER_PATH",
+            f"/api/v3/device/name/{device}/ActivePower",
+        )
+    }
+    for device in ("Battery", "EVC", "PV", "Load")
+}
+
 for device, resources in FLEX_ASSET_PARAM_PATHS.items():
     for resource, path in resources.items():
         if not path.startswith("/") or path.startswith("//"):
@@ -56,9 +66,30 @@ def read_parameters():
     except (KeyError, ValueError, TypeError, StopIteration, OverflowError):
         return jsonify(error="Core Command returned an invalid reading"), 502
 
-    app.config["DEVICE_READINGS"] = snapshot
+    app.config["FLEX_PARAMETERS"] = snapshot
     return jsonify(snapshot)
 
+@app.get("/api/v1/flexdevices/activepower")
+def read_active_power():
+    snapshot = {}
+    try:
+        for device, resources in FLEX_ASSET_PARAM_PATHS.items():
+            if "ActivePower" in resources:
+                path = resources["ActivePower"]
+                value = read_core_command_value(path, "ActivePower")
+                if not math.isfinite(value):
+                    raise ValueError("reading must be finite")
+                snapshot[device] = {"ActivePower": value}
+    except requests.exceptions.HTTPError:
+        return jsonify(error="Core Command rejected the request"), 502
+    except requests.exceptions.JSONDecodeError:
+        return jsonify(error="Core Command returned an invalid reading"), 502
+    except requests.exceptions.RequestException:
+        return jsonify(error="Core Command is unavailable"), 503
+    except (KeyError, ValueError, TypeError, StopIteration, OverflowError):
+        return jsonify(error="Core Command returned an invalid reading"), 502
+
+    return jsonify(snapshot)
 
 @app.post("/api/v1/flexibility-requests")
 def receive_flexibility_request():
