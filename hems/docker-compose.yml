@@ -9,8 +9,20 @@ services:
     depends_on:
       core-command:
         condition: service_started
+      device-home:
+        condition: service_started
     environment:
       CORE_COMMAND_URL: http://edgex-core-command:59882
+      # GET http://localhost:8000/api/v1/devices/readings fetches all eight values.
+      # Latest complete result is stored in app.config["DEVICE_READINGS"].
+      BATTERY_SOC_PATH: /api/v3/device/name/Battery/BatterySOC
+      BATTERY_MAX_CHARGING_POWER_PATH: /api/v3/device/name/Battery/BatteryMaxChargingPower
+      BATTERY_MAX_DISCHARGING_POWER_PATH: /api/v3/device/name/Battery/BatteryMaxDischargingPower
+      BATTERY_CAPACITY_PATH: /api/v3/device/name/Battery/BatteryCapacity
+      EVC_SOC_PATH: /api/v3/device/name/EVC/BatterySOC
+      EVC_MAX_CHARGING_POWER_PATH: /api/v3/device/name/EVC/BatteryMaxChargingPower
+      EVC_MAX_DISCHARGING_POWER_PATH: /api/v3/device/name/EVC/BatteryMaxDischargingPower
+      EVC_CAPACITY_PATH: /api/v3/device/name/EVC/BatteryCapacity
     networks:
       edgex-network: null
     ports:
