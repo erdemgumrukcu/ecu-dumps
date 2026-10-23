@@ -5,6 +5,15 @@ EdgeX deployment. It requires the existing `edgex_edgex-network`, core-keeper,
 core-metadata, core-data, MQTT broker, and `blel-reverse-proxy`. It does not
 create or replace those services.
 
+ECU B's existing Core Keeper uses port `59883`. The configuration-provider
+URL in Compose must match that internal listening port. Check connectivity
+before starting the REST service:
+
+```sh
+docker exec blel-reverse-proxy curl -i --fail-with-body --max-time 10 \
+  http://edgex-core-keeper:59883/api/v3/ping
+```
+
 The container is named `edgex-device-hems`. The REST SDK's `--instance=hems`
 option registers it in EdgeX as `device-rest_hems`, avoiding a collision with
 an existing `device-rest` service.

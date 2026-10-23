@@ -8,7 +8,7 @@ services:
     hostname: edgex-device-hems
     command:
       - --registry
-      - -cp=keeper.http://edgex-core-keeper:59890
+      - -cp=keeper.http://edgex-core-keeper:59883
       - --instance=hems
     environment:
       EDGEX_SECURITY_SECRET_STORE: "false"
