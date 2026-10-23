@@ -23,13 +23,17 @@ write_value PV ReactivePower 0.0
 write_value Battery ActivePower 0.0
 write_value Battery ReactivePower 0.0
 write_value Battery BatterySOC 0.5
+write_value Battery BatterySOC_Min 0.2
+write_value Battery BatterySOC_Max 0.8
 write_value Battery BatteryCapacity 10.0
 write_value Battery BatteryMaxChargingPower 5.0
 write_value Battery BatteryMaxDischargingPower 5.0
 
-write_value EVC ActivePower 11.0
+write_value EVC ActivePower 0.0
 write_value EVC ReactivePower 0.0
 write_value EVC BatterySOC 0.5
-write_value EVC BatteryCapacity 50.0
-write_value EVC BatteryMaxChargingPower 5.0
-write_value EVC BatteryMaxDischargingPower 5.0
+write_value EVC BatteryCapacity 110.0
+write_value EVC BatteryMaxChargingPower 11.0
+write_value EVC BatteryMaxDischargingPower 11.0
+write_value EVC BatterySOC_Min 0.1
+write_value EVC BatterySOC_Max 1.0

@@ -17,6 +17,8 @@ FLEX_ASSET_PARAM_PATHS = {
             ("MAX_CHARGING_POWER", "BatteryMaxChargingPower"),
             ("MAX_DISCHARGING_POWER", "BatteryMaxDischargingPower"),
             ("CAPACITY", "BatteryCapacity"),
+            ("SOC_MIN", "BatterySOC_Min"),
+            ("SOC_MAX", "BatterySOC_Max")
         )
     }
     for device in ("Battery", "EVC")
@@ -63,19 +65,21 @@ def calculate_asset_bounds(parameters, soc, delta_t_hours):
     capacity = parameters["BatteryCapacity"]
     charging = parameters["BatteryMaxChargingPower"]
     discharging = parameters["BatteryMaxDischargingPower"]
+    soc_min = parameters["BatterySOC_Min"]
+    soc_max = parameters["BatterySOC_Max"]
     if any(
         isinstance(value, bool)
         or not isinstance(value, (int, float))
         or not math.isfinite(value)
         or value < 0
-        for value in (capacity, charging, discharging)
+        for value in (capacity, charging, discharging, soc_min, soc_max)
     ):
         raise ValueError("Capacity and power limits must be finite and nonnegative")
     if not math.isfinite(soc) or not 0 <= soc <= 1:
         raise ValueError("SOC must be between 0 and 1")
 
-    lower = -min(discharging, soc * capacity / delta_t_hours)
-    upper = min(charging, (1 - soc) * capacity / delta_t_hours)
+    lower = -min(discharging, (soc-soc_min) * capacity / delta_t_hours)
+    upper = min(charging, (soc_max - soc) * capacity / delta_t_hours)
     return lower, upper
 
 
@@ -107,7 +111,10 @@ def read_flexibility_range():
 
         load = read_core_command_value(RT_ACTIVE_POWER_PATHS["Load"]["ActivePower"], "ActivePower")
         pv = read_core_command_value(RT_ACTIVE_POWER_PATHS["PV"]["ActivePower"], "ActivePower")
+        evc= read_core_command_value(RT_ACTIVE_POWER_PATHS["EVC"]["ActivePower"], "ActivePower")
+        bat = read_core_command_value(RT_ACTIVE_POWER_PATHS["Battery"]["ActivePower"], "ActivePower")
         inflexible = load - pv
+        current_net= load - pv + evc + bat
         lower += inflexible
         upper += inflexible
         if not all(math.isfinite(value) for value in (load, pv, lower, upper)):
@@ -121,7 +128,7 @@ def read_flexibility_range():
     except (KeyError, ValueError, TypeError, StopIteration, OverflowError):
         return jsonify(error="Invalid flexibility parameters or Core Command reading"), 502
 
-    return jsonify(hems_ub=upper, hems_lb=lower)
+    return jsonify(hems_ub=upper, hems_lb=lower, current_net=current_net)
 
 
 @app.get("/api/v1/flexdevices/capacityparameters")

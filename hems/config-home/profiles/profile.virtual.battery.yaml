@@ -25,6 +25,18 @@ deviceResources:
     properties:
       valueType: "Float64"
       readWrite: "RW"
+  - name: "BatterySOC_Min"
+    isHidden: false
+    description: "HOME Emulator Battery Virtual Device — Minimum State of Charge."
+    properties:
+      valueType: "Float64"
+      readWrite: "RW"
+  - name: "BatterySOC_Max"
+    isHidden: false
+    description: "HOME Emulator Battery Virtual Device — Maximum State of Charge."
+    properties:
+      valueType: "Float64"
+      readWrite: "RW"
   - name: "BatteryCapacity"
     isHidden: false
     description: "HOME Emulator Battery Virtual Device — Battery Capacity."
@@ -58,6 +70,8 @@ deviceCommands:
       - { deviceResource: "ActivePower" }
       - { deviceResource: "ReactivePower" }
       - { deviceResource: "BatterySOC" }
+      - { deviceResource: "BatterySOC_Min" }
+      - { deviceResource: "BatterySOC_Max" }
       - { deviceResource: "BatteryCapacity" }
       - { deviceResource: "BatteryMaxChargingPower" }
       - { deviceResource: "BatteryMaxDischargingPower" }

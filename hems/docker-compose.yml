@@ -22,11 +22,15 @@ services:
       BATTERY_MAX_DISCHARGING_POWER_PATH: /api/v3/device/name/Battery/BatteryMaxDischargingPower
       BATTERY_CAPACITY_PATH: /api/v3/device/name/Battery/BatteryCapacity
       BATTERY_ACTIVE_POWER_PATH: /api/v3/device/name/Battery/ActivePower
+      BATTERY_SOC_MIN_PATH: /api/v3/device/name/Battery/BatterySOC_Min
+      BATTERY_SOC_MAX_PATH: /api/v3/device/name/Battery/BatterySOC_Max
       EVC_SOC_PATH: /api/v3/device/name/EVC/BatterySOC
       EVC_ACTIVE_POWER_PATH: /api/v3/device/name/EVC/ActivePower
       EVC_MAX_CHARGING_POWER_PATH: /api/v3/device/name/EVC/BatteryMaxChargingPower
       EVC_MAX_DISCHARGING_POWER_PATH: /api/v3/device/name/EVC/BatteryMaxDischargingPower
       EVC_CAPACITY_PATH: /api/v3/device/name/EVC/BatteryCapacity
+      EVC_SOC_MIN_PATH: /api/v3/device/name/EVC/BatterySOC_Min
+      EVC_SOC_MAX_PATH: /api/v3/device/name/EVC/BatterySOC_Max
       PV_ACTIVE_POWER_PATH: /api/v3/device/name/PV/ActivePower
       LOAD_ACTIVE_POWER_PATH: /api/v3/device/name/Load/ActivePower
     networks:
