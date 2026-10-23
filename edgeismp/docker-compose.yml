@@ -1,0 +1,39 @@
+name: edgeismp-hems
+
+services:
+  device-hems:
+    image: nexus3.edgexfoundry.org:10004/device-rest-arm64:latest
+    platform: linux/arm64
+    container_name: edgex-device-hems
+    hostname: edgex-device-hems
+    command:
+      - --registry
+      - -cp=keeper.http://edgex-core-keeper:59890
+      - --instance=hems
+    environment:
+      EDGEX_SECURITY_SECRET_STORE: "false"
+      SERVICE_HOST: edgex-device-hems
+      SERVICE_SERVERBINDADDR: 0.0.0.0
+      SERVICE_PORT: "59986"
+      CLIENTS_CORE_METADATA_HOST: edgex-core-metadata
+      CLIENTS_CORE_DATA_HOST: edgex-core-data
+      MESSAGEBUS_HOST: edgex-mqtt-broker
+      MESSAGEBUS_OPTIONAL_CLIENTID: device-rest-hems
+      DEVICE_DEVICESDIR: /custom-config/devices
+      DEVICE_PROFILESDIR: /custom-config/profiles
+      WRITABLE_LOGLEVEL: INFO
+    networks:
+      - edgex-network
+    volumes:
+      - ./config-rest/devices:/custom-config/devices:ro
+      - ./config-rest/profiles:/custom-config/profiles:ro
+    read_only: true
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    user: "2002:2001"
+
+networks:
+  edgex-network:
+    external: true
+    name: edgex_edgex-network

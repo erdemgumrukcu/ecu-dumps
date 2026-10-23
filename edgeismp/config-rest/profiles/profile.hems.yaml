@@ -1,0 +1,14 @@
+name: Profile-HEMS
+manufacturer: BEAVER
+description: ECU1 HEMS flexibility range through the ECU B reverse proxy
+labels:
+  - REST
+  - HEMS
+deviceResources:
+  - name: flexibility-range
+    isHidden: false
+    description: JSON flexibility range for the requested delta_t_seconds
+    properties:
+      valueType: Object
+      readWrite: R
+      mediaType: application/json

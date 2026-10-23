@@ -1,0 +1,37 @@
+name: "Profile-Modbus-SMP4250"
+manufacturer: "BEAVER"
+description: "BEAVER Emulator Transformer Sensor"
+labels:
+  - "Modbus TCP"
+  - "BEAVER"
+deviceResources:
+  -
+    name: "trafo_p"
+    isHidden: false
+    description: "Resource available in Modbus holding register 0"
+    attributes:
+      { primaryTable: "HOLDING_REGISTERS", startingAddress: 16, rawType: "Int16" }
+    properties:
+      valueType: "Float32"
+      readWrite: "RW"
+      scale: 1.0
+  -
+    name: "trafo_q"
+    isHidden: false
+    description: "Resource available in Modbus holding register 16"
+    attributes:
+      { primaryTable: "HOLDING_REGISTERS", startingAddress: 0, rawType: "Int16" }
+    properties:
+      valueType: "Float32"
+      readWrite: "RW"
+      scale: 1.0
+
+
+deviceCommands:
+  -
+    name: "ReadAllRegisters"
+    readWrite: "R"
+    isHidden: false
+    resourceOperations:
+      - { deviceResource: "trafo_p" }
+      - { deviceResource: "trafo_q" }
