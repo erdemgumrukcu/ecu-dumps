@@ -32,7 +32,20 @@ RT_ACTIVE_POWER_PATHS= {
     for device in ("Battery", "EVC", "PV", "Load")
 }
 
-for device, resources in FLEX_ASSET_PARAM_PATHS.items():
+SOC_PATHS = {
+    device: os.environ.get(
+        f"{device.upper()}_SOC_PATH",
+        f"/api/v3/device/name/{device}/BatterySOC",
+    )
+    for device in ("Battery", "EVC")
+}
+
+for device in RT_ACTIVE_POWER_PATHS:
+    resources = {
+        **FLEX_ASSET_PARAM_PATHS.get(device, {}),
+        **RT_ACTIVE_POWER_PATHS[device],
+        **({"BatterySOC": SOC_PATHS[device]} if device in SOC_PATHS else {}),
+    }
     for resource, path in resources.items():
         if not path.startswith("/") or path.startswith("//"):
             raise ValueError(f"{device}/{resource} path must start with a single '/'")
@@ -44,6 +57,71 @@ def read_core_command_value(path, resource):
     readings = response.json()["event"]["readings"]
     reading = next(item for item in readings if item["resourceName"] == resource)
     return float(reading["value"])
+
+
+def calculate_asset_bounds(parameters, soc, delta_t_hours):
+    capacity = parameters["BatteryCapacity"]
+    charging = parameters["BatteryMaxChargingPower"]
+    discharging = parameters["BatteryMaxDischargingPower"]
+    if any(
+        isinstance(value, bool)
+        or not isinstance(value, (int, float))
+        or not math.isfinite(value)
+        or value < 0
+        for value in (capacity, charging, discharging)
+    ):
+        raise ValueError("Capacity and power limits must be finite and nonnegative")
+    if not math.isfinite(soc) or not 0 <= soc <= 1:
+        raise ValueError("SOC must be between 0 and 1")
+
+    lower = -min(discharging, soc * capacity / delta_t_hours)
+    upper = min(charging, (1 - soc) * capacity / delta_t_hours)
+    return lower, upper
+
+
+@app.get("/api/v1/flexibility-range")
+def read_flexibility_range():
+    try:
+        delta_t_seconds = float(request.args["delta_t_seconds"])
+        delta_t_hours = delta_t_seconds / 3600
+        if not math.isfinite(delta_t_seconds) or delta_t_hours <= 0:
+            raise ValueError("Invalid duration")
+    except (KeyError, ValueError, OverflowError):
+        return jsonify(error="delta_t_seconds must be a finite positive number"), 400
+
+    parameters = app.config.get("FLEX_PARAMETERS")
+    if parameters is None:
+        return jsonify(
+            error="Read /api/v1/flexdevices/capacityparameters before requesting flexibility"
+        ), 503
+
+    try:
+        lower = upper = 0.0
+        for device, path in SOC_PATHS.items():
+            soc = read_core_command_value(path, "BatterySOC")
+            asset_lower, asset_upper = calculate_asset_bounds(
+                parameters[device], soc, delta_t_hours
+            )
+            lower += asset_lower
+            upper += asset_upper
+
+        load = read_core_command_value(RT_ACTIVE_POWER_PATHS["Load"]["ActivePower"], "ActivePower")
+        pv = read_core_command_value(RT_ACTIVE_POWER_PATHS["PV"]["ActivePower"], "ActivePower")
+        inflexible = load - pv
+        lower += inflexible
+        upper += inflexible
+        if not all(math.isfinite(value) for value in (load, pv, lower, upper)):
+            raise ValueError("Power and bounds must be finite")
+    except requests.exceptions.HTTPError:
+        return jsonify(error="Core Command rejected the request"), 502
+    except requests.exceptions.JSONDecodeError:
+        return jsonify(error="Core Command returned an invalid reading"), 502
+    except requests.exceptions.RequestException:
+        return jsonify(error="Core Command is unavailable"), 503
+    except (KeyError, ValueError, TypeError, StopIteration, OverflowError):
+        return jsonify(error="Invalid flexibility parameters or Core Command reading"), 502
+
+    return jsonify(hems_ub=upper, hems_lb=lower)
 
 
 @app.get("/api/v1/flexdevices/capacityparameters")

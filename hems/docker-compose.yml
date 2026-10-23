@@ -13,8 +13,10 @@ services:
         condition: service_started
     environment:
       CORE_COMMAND_URL: http://edgex-core-command:59882
-      # GET http://localhost:8000/api/v1/devices/readings fetches all eight values.
-      # Latest complete result is stored in app.config["DEVICE_READINGS"].
+      # GET /api/v1/flexdevices/capacityparameters caches capacity and power limits.
+      # GET /api/v1/flexibility-range?delta_t_seconds=900 uses that cache plus live SOC/PV/Load.
+      # Returns hems_lb/hems_ub in kW, positive for consumption/charging.
+      # Inflexible power = Load - PV; capacity is kWh, SOC is 0..1, ideal efficiency.
       BATTERY_SOC_PATH: /api/v3/device/name/Battery/BatterySOC
       BATTERY_MAX_CHARGING_POWER_PATH: /api/v3/device/name/Battery/BatteryMaxChargingPower
       BATTERY_MAX_DISCHARGING_POWER_PATH: /api/v3/device/name/Battery/BatteryMaxDischargingPower
