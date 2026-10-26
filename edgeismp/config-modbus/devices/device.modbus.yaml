@@ -1,11 +1,10 @@
 deviceList:
-- name: "Device-Modbus-SMP4250"
-  profileName: "Profile-Modbus-SMP4250"
+- name: "Device-PQI"
+  profileName: "Profile-Trafo-PQI"
   description: "This is a Modbus device running in SMP4250"
   labels: 
     - "modbus"
     - "BEAVER"
-    - "SMP4250"
   protocols:
     modbus-tcp:
       Address: "169.254.84.30"
