@@ -7,7 +7,7 @@ deviceList:
     - "BEAVER"
   protocols:
     modbus-tcp:
-      Address: "169.254.84.30"
+      Address: "10.100.2.204"
       Port: "502"
       UnitID: "1"
       Timeout: "5"
