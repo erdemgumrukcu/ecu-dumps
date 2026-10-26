@@ -10,7 +10,7 @@ services:
         condition: service_started
     environment:
       HEMS_FLEX_READ_PATH: "http://edgex-device-hems:59986/api/v3/device/name/Device-HEMS/flexibility-range?delta_t_seconds=900"
-      TRAFO_SENSOR_P_READ_PATH: "http://edgex-core-command:59882/api/v3/device/name/Device-Modbus-SMP4250/trafo_p"
+      TRAFO_SENSOR_P_READ_PATH: "http://edgex-core-command:59882/api/v3/device/name/Device-PQI/trafo_p"
       CONTROL_REFRESH_INTERVAL_SECONDS: "60"
       PYTHONUNBUFFERED: "1"
       PYTHONDONTWRITEBYTECODE: "1"
@@ -30,7 +30,7 @@ services:
     environment:
       EDGEX_SECURITY_SECRET_STORE: "false"
       SERVICE_HOST: edgex-device-pqi
-      SERVICE_SERVERBINDADDR: edgex-device-pqi
+      SERVICE_SERVERBINDADDR: 0.0.0.0
       SERVICE_PORT: "59901"
       DEVICE_DEVICESDIR: /custom-config/devices
       DEVICE_PROFILESDIR: /custom-config/profiles
