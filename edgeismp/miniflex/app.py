@@ -138,7 +138,7 @@ def main():
             estimated_trafo_load_without_hems = rt_load_trafo - hems_p_now
             print("Estimated trafo load without HEMS:", estimated_trafo_load_without_hems)
             p_ref = run_control_algorithm(
-                estimated_trafo_load_without_hems, TRANSFORMER_LIMIT, hems_p_now, hems_p_ub, hems_p_lb
+                rt_load_trafo, TRANSFORMER_LIMIT, hems_p_now, hems_p_ub, hems_p_lb
             )
             print("HEMS p_ref:", p_ref)
             send_hems_recommendation(p_ref)
