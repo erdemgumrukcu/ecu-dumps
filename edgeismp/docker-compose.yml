@@ -29,8 +29,8 @@ services:
     container_name: edgex-device-pqi
     environment:
       EDGEX_SECURITY_SECRET_STORE: "false"
-      SERVICE_HOST: edgex-device-pqi
-      SERVICE_SERVERBINDADDR: 0.0.0.0
+      SERVICE_HOST: edgex-device-modbus-bridge
+      SERVICE_SERVERBINDADDR: edgex-device-modbus-bridge
       SERVICE_PORT: "59901"
       DEVICE_DEVICESDIR: /custom-config/devices
       DEVICE_PROFILESDIR: /custom-config/profiles
@@ -42,7 +42,7 @@ services:
     networks:
       edgex-network:
         aliases:
-          - edgex-device-pqi
+          - edgex-device-modbus-bridge
       macvlan:
         ipv4_address: 169.254.84.11
     ports:

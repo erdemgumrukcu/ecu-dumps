@@ -8,7 +8,13 @@ services.
 The Modbus service also reuses the existing `edgex_macvlan` network. Both
 networks are declared external: this project neither creates nor deletes
 them. Verify the existing macvlan subnet includes `169.254.84.11` and that
-this address is not already assigned before starting `device-modbus`.
+this address is not already assigned before starting `device-pqi`.
+
+The `device-pqi` container still registers in EdgeX as `device-modbus`.
+Its bridge-network alias `edgex-device-modbus-bridge` preserves compatibility
+with the listener hostname and service address saved in ECU B's Keeper and
+metadata. Only this container should own that alias on `edgex_edgex-network`.
+Recreate `device-pqi` after adding the alias; no Keeper overwrite is required.
 
 The REST container calls ECU1 directly over HTTP:
 
