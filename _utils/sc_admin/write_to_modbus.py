@@ -9,7 +9,7 @@ if __name__ == "__main__":
     modbus_configuration["timeout"] = 60
     modbus_configuration["registers"] = {}
     modbus_configuration["registers"]["p"] = 0
-    modbus_configuration["registers"]["q"] = 1
+    modbus_configuration["registers"]["q"] = 16
     modbus_configuration["time_offset_seconds"] = 15
 
     host = modbus_configuration["host"]
