@@ -126,12 +126,17 @@ numbers; invalid values are not sent. POST requests have a 10-second timeout,
 and HTTP errors are logged as cycle failures. The next interval reads fresh
 values and calculates a new recommendation rather than retrying an old one.
 
-Miniflex uses the configured set URL unchanged, with no conversion to an
-EdgeX PUT request or command envelope. The current Compose URL points to an
-EdgeX device-command endpoint; verify that this endpoint supports POST and
-the raw JSON body. Standard EdgeX writes use PUT, while the upstream HEMS
-API accepts POST at `/api/v1/flexibility-requests`. A rejected POST is logged,
-not treated as a successful write.
+Miniflex posts recommendations directly to ECU1's
+`/api/v1/flexibility-requests` API using `HEMS_FLEX_SET_PATH`; it does not send
+the write through EdgeX Core Command. This endpoint accepts the raw JSON body
+`{"activePowerReco": p_ref}`. Rejected requests are logged as cycle failures.
+
+After changing `HEMS_FLEX_SET_PATH`, recreate miniflex so it receives the
+updated environment:
+
+```sh
+docker compose up -d --no-build --pull never --force-recreate miniflex
+```
 
 On an ARM64 machine with internet access, build the image:
 
