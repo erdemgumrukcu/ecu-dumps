@@ -1,6 +1,29 @@
 name: edgeismp-hems
 
 services:
+  miniflex:
+    build:
+      context: ./miniflex
+    image: miniflex:local
+    platform: linux/arm64
+    container_name: miniflex
+    depends_on:
+      device-hems:
+        condition: service_started
+    environment:
+      HEMS_FLEX_READ_PATH: "http://edgex-device-hems:59986/api/v3/device/name/Device-HEMS/flexibility-range?delta_t_seconds=900"
+      TRAFO_SENSOR_P_READ_PATH: "http://edgex-device-hems:59986/api/v3/device/name/Device-Modbus-SMP4250/trafo-sensor-p"
+      CONTROL_REFRESH_INTERVAL_SECONDS: "60"
+      PYTHONUNBUFFERED: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+    networks:
+      - edgex-network
+    read_only: true
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    user: "2002:2001"
+
   device-hems:
     image: nexus3.edgexfoundry.org:10004/device-rest-arm64:latest
     platform: linux/arm64

@@ -1,12 +1,12 @@
 deviceList:
   - name: Device-HEMS
     profileName: Profile-HEMS
-    description: ECU1 HEMS API accessed through the ECU B reverse proxy
+    description: ECU1 HEMS API accessed directly from ECU B
     labels:
       - rest
       - HEMS
     protocols:
       REST:
-        Host: blel-reverse-proxy
-        Port: "80"
-        Path: hems/api/v1
+        Host: "134.130.88.189"
+        Port: "8000"
+        Path: api/v1

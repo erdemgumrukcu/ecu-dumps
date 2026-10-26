@@ -1,95 +1,143 @@
 # HEMS REST device service on ECU B
 
-This Compose project adds only the ARM64 REST device service to the running
+This Compose project adds the ARM64 REST device service and Python miniflex poller to the running
 EdgeX deployment. It requires the existing `edgex_edgex-network`, core-keeper,
-core-metadata, core-data, MQTT broker, and `blel-reverse-proxy`. It does not
-create or replace those services.
+core-metadata, core-data, and MQTT broker. It does not create or replace those
+services.
+
+The REST container calls ECU1 directly over HTTP:
+
+```text
+core-command -> edgex-device-hems -> 134.130.88.189:8000
+```
+
+No Nginx route or additional listener is required.
+The upstream API has no authentication or TLS; restrict access to trusted
+networks.
 
 ECU B's existing Core Keeper uses port `59883`. The configuration-provider
-URL in Compose must match that internal listening port. Check connectivity
-before starting the REST service:
-
-```sh
-docker exec blel-reverse-proxy curl -i --fail-with-body --max-time 10 \
-  http://edgex-core-keeper:59883/api/v3/ping
-```
+URL in Compose must match that internal listening port.
 
 The container is named `edgex-device-hems`. The REST SDK's `--instance=hems`
 option registers it in EdgeX as `device-rest_hems`, avoiding a collision with
 an existing `device-rest` service.
 
-## Install the proxy route
-
-Run these commands on ECU B from this directory. The gateway includes
-`/etc/nginx/container-apis/*.inc` in its public server blocks, and that directory
-is backed by the existing `edgex_container-apis` Docker volume.
-
-First check that the destination file is not already present. If it exists,
-inspect and back it up before replacing it:
-
-```sh
-docker exec blel-reverse-proxy ls -l /etc/nginx/container-apis/hems-api.inc
-```
-
-If the file does not exist, install the supplied
-[location snippet](config-rest/nginx/hems-api.inc), validate, and reload:
-
-```sh
-docker cp ./config-rest/nginx/hems-api.inc blel-reverse-proxy:/etc/nginx/container-apis/hems-api.inc
-docker exec blel-reverse-proxy nginx -t &&
-docker exec blel-reverse-proxy nginx -s reload
-```
-
-Do not reload if validation fails. The snippet persists in the gateway's
-existing volume; it is not managed by this Compose project. Review existing
-gateway authentication/access policies before exposing the route. It is a
-read-only route and does not add authentication itself.
-
-The proxy preserves query parameters and forwards:
-
-```text
-http://blel-reverse-proxy/hems/api/v1/flexibility-range?delta_t_seconds=900
-  -> http://134.130.88.189:8000/api/v1/flexibility-range?delta_t_seconds=900
-```
-
 ## Start and test
 
+On ECU B, from the transferred project directory:
+
 ```sh
+cd /tmp/demo/edgeismp
 docker compose config --quiet
-docker compose up -d device-hems
+docker compose up -d --pull never device-hems
 docker compose logs --tail=100 device-hems
 ```
+
+The ARM64 image must already be loaded locally when using `--pull never`.
+The `/tmp` deployment is temporary and may be cleared on reboot. For a
+persistent deployment, move the project to confirmed persistent storage.
 
 No host port is needed for the device service: core-command reaches it over
 the shared network at `edgex-device-hems:59986`.
 
-Test the proxy route from a temporary container on that network:
+To test connectivity from the REST container's network namespace, reuse the
+existing proxy image's curl without sending the request through Nginx:
 
 ```sh
-docker run --rm --network edgex_edgex-network curlimages/curl:latest \
-  -i --fail-with-body \
-  'http://blel-reverse-proxy/hems/api/v1/flexibility-range?delta_t_seconds=900'
+docker run --rm --pull never \
+  --network container:edgex-device-hems \
+  --entrypoint curl \
+  "$(docker inspect blel-reverse-proxy --format '{{.Config.Image}}')" \
+  -i --fail-with-body --connect-timeout 5 --max-time 30 \
+  'http://134.130.88.189:8000/api/v1/flexibility-range?delta_t_seconds=900'
 ```
 
-Expect HTTP 200 with the API's JSON body. Do not proceed on an HTTP-to-HTTPS
-redirect, authentication error, or other non-200 response. Those require
-adjusting the existing gateway policy; the REST driver uses HTTP for outgoing
-commands, so do not simply change the device port to 443.
+The proxy image is only a convenient locally available test tool, not a
+runtime dependency of the REST service. Expect HTTP 200 with JSON.
 
-Read through EdgeX core-command on ECU B:
+## Update an already-registered device
+
+Editing device YAML alone may not overwrite an existing metadata record.
+After transferring the updated YAML for future starts, update `Device-HEMS`
+explicitly. This uses the existing proxy container's curl to call metadata
+directly; Nginx is not involved:
+
+```sh
+docker exec blel-reverse-proxy curl -i --fail-with-body \
+  -X PATCH http://edgex-core-metadata:59881/api/v3/device \
+  -H 'Content-Type: application/json' \
+  -d '[{"apiVersion":"v3","device":{"name":"Device-HEMS","description":"ECU1 HEMS API accessed directly from ECU B","protocols":{"REST":{"Host":"134.130.88.189","Port":"8000","Path":"api/v1"}}}}]'
+```
+
+Check both the HTTP status and the per-device response status for success.
+The REST SDK receives the metadata update through its device callback.
+Verify the registered protocol settings:
+
+```sh
+docker exec blel-reverse-proxy curl -sS --fail-with-body --max-time 10 \
+  http://edgex-core-metadata:59881/api/v3/device/name/Device-HEMS
+```
+
+## Read through core-command
 
 ```sh
 curl -i --fail-with-body \
   'http://127.0.0.1:59882/api/v3/device/name/Device-HEMS/flexibility-range?delta_t_seconds=900'
 ```
 
+The driver combines the device's `Path` (`api/v1`) with the resource name
+(`flexibility-range`) and forwards the query parameter, producing:
+
+```text
+http://134.130.88.189:8000/api/v1/flexibility-range?delta_t_seconds=900
+```
+
 The EdgeX event contains an Object reading with the upstream JSON, not an
-individual Float64 reading. The driver builds the outgoing path from the
-device's `Path` and the resource name; the query parameter must be supplied
-in the read request. No automatic polling is configured.
+individual Float64 reading. Supply `delta_t_seconds` in each read request;
+`900` means a 15-minute calculation horizon, not a polling interval.
+No device AutoEvents are configured; miniflex performs polling as described below.
+
+## Miniflex polling
+
+The `miniflex` service reads the REST service directly, bypassing the existing
+core-command's Object serialization issue. Its `HEMS_FLEX_READ_PATH` environment
+variable contains the complete URL, including `delta_t_seconds=900`.
+`CONTROL_REFRESH_INTERVAL_SECONDS=60` requests a reading immediately at startup
+and every minute afterward. Failed requests or invalid readings are logged,
+and retried at the next interval without substituting zero values.
+
+The response's `current_net`, `hems_ub`, and `hems_lb` are printed to container
+logs. No setpoints are written. Transformer control is optional: configure
+`TRAFO_SENSOR_P_READ_PATH` and, if needed, `TRANSFORMER_LIMIT` to enable the
+existing control calculation.
+
+On an ARM64 machine with internet access, build the image:
+
+```sh
+docker compose build miniflex
+```
+
+For offline ECU B deployment, save the built image, transfer the archive, and
+load it with `docker load` just as for the REST image:
+
+```sh
+docker image save -o miniflex.tar miniflex:local
+```
+
+On ECU B, once both images and the configuration folder are present:
+
+```sh
+cd /tmp/demo/edgeismp
+docker compose up -d --no-build --pull never miniflex
+docker compose logs -f miniflex
+```
+
+The Python base image supports ARM64; building on an x86 Ubuntu PC requires an
+ARM64-capable builder/emulation, for example:
+
+```sh
+docker buildx build --platform linux/arm64 --load -t miniflex:local ./miniflex
+```
 
 If core-command is not published on host port 59882, make the same request
 from a container on `edgex_edgex-network` using `edgex-core-command:59882`.
-
-To change the upstream address, edit the snippet and reinstall/reload it.
-Editing the local snippet alone does not update the running gateway.

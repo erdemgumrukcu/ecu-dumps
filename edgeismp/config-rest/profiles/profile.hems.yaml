@@ -1,6 +1,6 @@
 name: Profile-HEMS
 manufacturer: BEAVER
-description: ECU1 HEMS flexibility range through the ECU B reverse proxy
+description: ECU1 HEMS flexibility range accessed directly from ECU B
 labels:
   - REST
   - HEMS
