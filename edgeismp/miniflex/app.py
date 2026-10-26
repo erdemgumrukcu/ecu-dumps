@@ -8,6 +8,7 @@ from urllib.parse import urlsplit
 
 TRAFO_SENSOR_P_READ_PATH = os.getenv("TRAFO_SENSOR_P_READ_PATH", "")
 HEMS_FLEX_READ_PATH = os.getenv("HEMS_FLEX_READ_PATH", "")
+HEMS_FLEX_SET_PATH = os.getenv("HEMS_FLEX_SET_PATH", "")
 CONTROL_REFRESH_INTERVAL_SECONDS = int(os.getenv("CONTROL_REFRESH_INTERVAL_SECONDS", "60"))
 TRANSFORMER_LIMIT = float(os.getenv("TRANSFORMER_LIMIT", "0.0"))
 
@@ -57,6 +58,16 @@ def read_hems_parameters():
         values.append(float(value))
     return tuple(values)
 
+def send_hems_recommendation(p_ref):
+    if isinstance(p_ref, bool) or not isinstance(p_ref, (int, float)) or not math.isfinite(p_ref):
+        raise ValueError("HEMS activePowerReco must be a finite number")
+    print(f"Sending HEMS activePowerReco={p_ref} to {HEMS_FLEX_SET_PATH}...")
+    response = requests.post(
+        HEMS_FLEX_SET_PATH, json={"activePowerReco": p_ref}, timeout=10
+    )
+    response.raise_for_status()
+    print("HEMS recommendation accepted")
+
 def _extract_edgex_reading_value(payload):
     """Extract the first reading value from an EdgeX event payload."""
     reading = payload["event"]["readings"][0]
@@ -102,9 +113,13 @@ def run_control_algorithm(rt_load, load_target, hems_p_now,hems_p_ub, hems_p_lb)
     return p_ref
 
 def main():
-    url = urlsplit(HEMS_FLEX_READ_PATH)
-    if url.scheme not in ("http", "https") or not url.netloc:
-        raise ValueError("HEMS_FLEX_READ_PATH must be an absolute HTTP(S) URL")
+    for name, path in (
+        ("HEMS_FLEX_READ_PATH", HEMS_FLEX_READ_PATH),
+        ("HEMS_FLEX_SET_PATH", HEMS_FLEX_SET_PATH),
+    ):
+        url = urlsplit(path)
+        if url.scheme not in ("http", "https") or not url.netloc:
+            raise ValueError(f"{name} must be an absolute HTTP(S) URL")
     if CONTROL_REFRESH_INTERVAL_SECONDS <= 0:
         raise ValueError("CONTROL_REFRESH_INTERVAL_SECONDS must be positive")
 
@@ -117,15 +132,16 @@ def main():
             print("HEMS p_now:", hems_p_now)
             print("HEMS p_ub:", hems_p_ub)
             print("HEMS p_lb:", hems_p_lb)
-            if TRAFO_SENSOR_P_READ_PATH:
-                rt_load_trafo = read_load_sensor()
-                print("RT load trafo:", rt_load_trafo)
-                estimated_trafo_load_without_hems = rt_load_trafo - hems_p_now
-                print("Estimated trafo load without HEMS:", estimated_trafo_load_without_hems)
-                p_ref = run_control_algorithm(
-                    estimated_trafo_load_without_hems, TRANSFORMER_LIMIT, hems_p_now, hems_p_ub, hems_p_lb
-                )
-                print("HEMS p_ref:", p_ref)
+              
+            rt_load_trafo = read_load_sensor()
+            print("RT load trafo:", rt_load_trafo)
+            estimated_trafo_load_without_hems = rt_load_trafo - hems_p_now
+            print("Estimated trafo load without HEMS:", estimated_trafo_load_without_hems)
+            p_ref = run_control_algorithm(
+                estimated_trafo_load_without_hems, TRANSFORMER_LIMIT, hems_p_now, hems_p_ub, hems_p_lb
+            )
+            print("HEMS p_ref:", p_ref)
+            send_hems_recommendation(p_ref)
         except (requests.RequestException, ValueError, KeyError, TypeError, OverflowError) as error:
             print(f"Miniflex cycle failed; retrying at the next interval: {error}")
 

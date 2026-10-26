@@ -118,9 +118,20 @@ and every minute afterward. Failed requests or invalid readings are logged,
 and retried at the next interval without substituting zero values.
 
 The response's `current_net`, `hems_ub`, and `hems_lb` are printed to container
-logs. No setpoints are written. Transformer control is optional: configure
-`TRAFO_SENSOR_P_READ_PATH` and, if needed, `TRANSFORMER_LIMIT` to enable the
-existing control calculation.
+logs. Each cycle reads `TRAFO_SENSOR_P_READ_PATH` and calculates `p_ref` using
+`TRANSFORMER_LIMIT` (default `0.0`). After calculation, miniflex sends an HTTP
+POST to `HEMS_FLEX_SET_PATH` with the JSON body `{"activePowerReco": p_ref}`.
+Both HEMS URLs must be absolute HTTP(S) URLs. Recommendations must be finite
+numbers; invalid values are not sent. POST requests have a 10-second timeout,
+and HTTP errors are logged as cycle failures. The next interval reads fresh
+values and calculates a new recommendation rather than retrying an old one.
+
+Miniflex uses the configured set URL unchanged, with no conversion to an
+EdgeX PUT request or command envelope. The current Compose URL points to an
+EdgeX device-command endpoint; verify that this endpoint supports POST and
+the raw JSON body. Standard EdgeX writes use PUT, while the upstream HEMS
+API accepts POST at `/api/v1/flexibility-requests`. A rejected POST is logged,
+not treated as a successful write.
 
 On an ARM64 machine with internet access, build the image:
 

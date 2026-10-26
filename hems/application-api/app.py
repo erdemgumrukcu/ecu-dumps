@@ -179,14 +179,20 @@ def read_active_power():
 @app.post("/api/v1/flexibility-requests")
 def receive_flexibility_request():
     payload = request.get_json(silent=True)
-    value = payload.get("activePowerReco") if isinstance(payload, dict) else None
-    if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+    pcc_value = payload.get("activePowerReco") if isinstance(payload, dict) else None
+    if isinstance(pcc_value, bool) or not isinstance(pcc_value, (int, float)) or not math.isfinite(pcc_value):
         return jsonify(error="activePowerReco must be a finite number"), 400
 
     try:
+        
+        load = read_core_command_value(RT_ACTIVE_POWER_PATHS["Load"]["ActivePower"], "ActivePower")
+        pv = read_core_command_value(RT_ACTIVE_POWER_PATHS["PV"]["ActivePower"], "ActivePower")
+        inflexible = load - pv
+        evc_setpoint = pcc_value - inflexible
+                
         response = requests.put(
-            f"{CORE_COMMAND_URL}/api/v3/device/name/Battery/ActivePowerSetpoint",
-            json={"ActivePowerSetpoint": value},
+            f"{CORE_COMMAND_URL}/api/v3/device/name/EVC/ActivePowerSetpoint",
+            json={"ActivePowerSetpoint": evc_setpoint},
             timeout=10,
         )
         response.raise_for_status()
@@ -195,7 +201,7 @@ def receive_flexibility_request():
     except requests.exceptions.RequestException:
         return jsonify(error="Core Command is unavailable"), 503
 
-    return jsonify(device="Battery", resource="ActivePowerSetpoint", value=value)
+    return jsonify(device="EVC", resource="ActivePowerSetpoint", value=evc_setpoint)
 
 
 @app.get("/api/v1/devices/<device>/<resource>")
