@@ -111,18 +111,18 @@ def main():
     print("Starting miniflex...")
     next_read_time = time.monotonic()
     while True:
-        print(f"HEMS reading at {datetime.now().isoformat()}")
+        print(f"HEMS and PQI reading cycle started at {datetime.now().isoformat()}")
         try:
             hems_p_now, hems_p_ub, hems_p_lb = read_hems_parameters()
             print("HEMS p_now:", hems_p_now)
             print("HEMS p_ub:", hems_p_ub)
             print("HEMS p_lb:", hems_p_lb)
-            # if TRAFO_SENSOR_P_READ_PATH:
-            #     rt_load_trafo = read_load_sensor()
-            #     p_ref = run_control_algorithm(
-            #         rt_load_trafo, TRANSFORMER_LIMIT, hems_p_now, hems_p_ub, hems_p_lb
-            #     )
-            #     print("HEMS p_ref:", p_ref)
+            if TRAFO_SENSOR_P_READ_PATH:
+                rt_load_trafo = read_load_sensor()
+                p_ref = run_control_algorithm(
+                    rt_load_trafo, TRANSFORMER_LIMIT, hems_p_now, hems_p_ub, hems_p_lb
+                )
+                print("HEMS p_ref:", p_ref)
         except (requests.RequestException, ValueError, KeyError, TypeError, OverflowError) as error:
             print(f"Miniflex cycle failed; retrying at the next interval: {error}")
 
