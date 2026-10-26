@@ -8,34 +8,34 @@ if __name__ == "__main__":
     modbus_configuration["unit_id"] = 1
     modbus_configuration["timeout"] = 60
     modbus_configuration["registers"] = {}
-    modbus_configuration["registers"]["ambient_temp"] = 1
-    modbus_configuration["registers"]["load_factor"] = 0
+    modbus_configuration["registers"]["p"] = 1
+    modbus_configuration["registers"]["q"] = 0
     modbus_configuration["time_offset_seconds"] = 15
 
     host = modbus_configuration["host"]
     port = modbus_configuration["port"]
     unit_id = modbus_configuration["unit_id"]
     timeout = modbus_configuration["timeout"]
-    amb_address = modbus_configuration["registers"]["ambient_temp"]
-    load_address = modbus_configuration["registers"]["load_factor"]
-    ambt = 25
-    load = 80
+    p_address = modbus_configuration["registers"]["p"]
+    q_address = modbus_configuration["registers"]["q"]
+    p = 10
+    q = 0
 
     client = ModbusTcpClient(host=host, port=port, timeout=timeout)
     if not client.connect():
         raise ConnectionError(f"Could not connect to Modbus server at {host}:{port}")
     print(f"Connected to Modbus server at {host}:{port}")
 
-    response_ambt = client.write_register(address=amb_address, value=ambt, device_id=unit_id)
-    if response_ambt.isError():
-        print(f"Failed to write ambient temperature: {response_ambt}")
+    response_p = client.write_register(address=p_address, value=p, device_id=unit_id)
+    if response_p.isError():
+        print(f"Failed to write p: {response_p}")
     else:
-        print(f"Wrote ambient temperature: {ambt})")
+        print(f"Wrote p: {p})")
 
-    response_load = client.write_register(address=load_address, value=load, device_id=unit_id)
-    if response_load.isError():
-        print(f"Failed to write load factor: {response_load}")
+    response_q = client.write_register(address=q_address, value=q, device_id=unit_id)
+    if response_q.isError():
+        print(f"Failed to write q: {response_q}")
     else:
-        print(f"Wrote load factor:  {load})")
+        print(f"Wrote q:  {q})")
     client.close()
     print("Modbus connection closed.")
