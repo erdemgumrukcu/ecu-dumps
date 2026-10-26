@@ -2,8 +2,6 @@ name: edgeismp-hems
 
 services:
   miniflex:
-    build:
-      context: ./miniflex
     image: miniflex:local
     platform: linux/arm64
     container_name: miniflex
