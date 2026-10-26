@@ -27,19 +27,6 @@ services:
       - -cp=keeper.http://edgex-core-keeper:59890
       - --registry
     container_name: edgex-device-modbus
-    depends_on:
-      core-common-config-bootstrapper:
-        condition: service_started
-        required: true
-      core-keeper:
-        condition: service_started
-        required: true
-      core-data:
-        condition: service_started
-        required: true
-      core-metadata:
-        condition: service_started
-        required: true
     environment:
       EDGEX_SECURITY_SECRET_STORE: "false"
       SERVICE_HOST: edgex-device-modbus-bridge
