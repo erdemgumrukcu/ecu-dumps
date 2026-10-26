@@ -119,8 +119,11 @@ def main():
             print("HEMS p_lb:", hems_p_lb)
             if TRAFO_SENSOR_P_READ_PATH:
                 rt_load_trafo = read_load_sensor()
+                print("RT load trafo:", rt_load_trafo)
+                estimated_trafo_load_without_hems = rt_load_trafo - hems_p_now
+                print("Estimated trafo load without HEMS:", estimated_trafo_load_without_hems)
                 p_ref = run_control_algorithm(
-                    rt_load_trafo, TRANSFORMER_LIMIT, hems_p_now, hems_p_ub, hems_p_lb
+                    estimated_trafo_load_without_hems, TRANSFORMER_LIMIT, hems_p_now, hems_p_ub, hems_p_lb
                 )
                 print("HEMS p_ref:", p_ref)
         except (requests.RequestException, ValueError, KeyError, TypeError, OverflowError) as error:
