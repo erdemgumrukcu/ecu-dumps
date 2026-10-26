@@ -18,8 +18,8 @@ if __name__ == "__main__":
     timeout = modbus_configuration["timeout"]
     p_address = modbus_configuration["registers"]["p"]
     q_address = modbus_configuration["registers"]["q"]
-    p = 10.0
-    q = 0.0
+    p = 10
+    q = 0
 
     client = ModbusTcpClient(host=host, port=port, timeout=timeout)
     if not client.connect():
