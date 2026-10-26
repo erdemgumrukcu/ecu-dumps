@@ -108,10 +108,5 @@ networks:
     name: edgex_edgex-network
 
   macvlan:
+    external: true
     name: edgex_macvlan
-    driver: macvlan
-    driver_opts:
-      parent: eth0
-    ipam:
-      config:
-        - subnet: 169.254.0.0/16

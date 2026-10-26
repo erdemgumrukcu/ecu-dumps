@@ -5,6 +5,11 @@ EdgeX deployment. It requires the existing `edgex_edgex-network`, core-keeper,
 core-metadata, core-data, and MQTT broker. It does not create or replace those
 services.
 
+The Modbus service also reuses the existing `edgex_macvlan` network. Both
+networks are declared external: this project neither creates nor deletes
+them. Verify the existing macvlan subnet includes `169.254.84.11` and that
+this address is not already assigned before starting `device-modbus`.
+
 The REST container calls ECU1 directly over HTTP:
 
 ```text
