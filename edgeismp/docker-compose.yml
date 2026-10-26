@@ -22,27 +22,27 @@ services:
       - no-new-privileges:true
     user: "2002:2001"
 
-  device-modbus:
+  device-pqi:
     command:
       - -cp=keeper.http://edgex-core-keeper:59890
       - --registry
-    container_name: edgex-device-modbus
+    container_name: edgex-device-pqi
     environment:
       EDGEX_SECURITY_SECRET_STORE: "false"
-      SERVICE_HOST: edgex-device-modbus-bridge
-      SERVICE_SERVERBINDADDR: edgex-device-modbus-bridge
+      SERVICE_HOST: edgex-device-pqi
+      SERVICE_SERVERBINDADDR: edgex-device-pqi
       SERVICE_PORT: "59901"
       DEVICE_DEVICESDIR: /custom-config/devices
       DEVICE_PROFILESDIR: /custom-config/profiles
       WRITABLE_LOGLEVEL: DEBUG
-    hostname: edgex-device-modbus
+    hostname: edgex-device-pqi
     #image: edgexfoundry/device-modbus:3.1.1
     image: nexus3.edgexfoundry.org:10004/device-modbus-arm64:latest
     platform: linux/arm64
     networks:
       edgex-network:
         aliases:
-          - edgex-device-modbus-bridge
+          - edgex-device-pqi
       macvlan:
         ipv4_address: 169.254.84.11
     ports:
