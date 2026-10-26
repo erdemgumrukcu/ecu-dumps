@@ -8,8 +8,8 @@ if __name__ == "__main__":
     modbus_configuration["unit_id"] = 1
     modbus_configuration["timeout"] = 60
     modbus_configuration["registers"] = {}
-    modbus_configuration["registers"]["p"] = 0
-    modbus_configuration["registers"]["q"] = 16
+    modbus_configuration["registers"]["p"] = 16
+    modbus_configuration["registers"]["q"] = 0
     modbus_configuration["time_offset_seconds"] = 15
 
     host = modbus_configuration["host"]
@@ -32,10 +32,10 @@ if __name__ == "__main__":
     else:
         print(f"Wrote p: {p})")
 
-    response_q = client.write_register(address=q_address, value=q, device_id=unit_id)
-    if response_q.isError():
-        print(f"Failed to write q: {response_q}")
-    else:
-        print(f"Wrote q:  {q})")
+    # response_q = client.write_register(address=q_address, value=q, device_id=unit_id)
+    # if response_q.isError():
+    #     print(f"Failed to write q: {response_q}")
+    # else:
+    #     print(f"Wrote q:  {q})")
     client.close()
     print("Modbus connection closed.")
