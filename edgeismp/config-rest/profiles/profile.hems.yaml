@@ -17,5 +17,5 @@ deviceResources:
     description: JSON active power recommendation flexibility request
     properties:
       valueType: Object
-      readWrite: W
+      readWrite: RW
       mediaType: application/json
