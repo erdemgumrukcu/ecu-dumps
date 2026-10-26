@@ -12,7 +12,7 @@ services:
         condition: service_started
     environment:
       HEMS_FLEX_READ_PATH: "http://edgex-device-hems:59986/api/v3/device/name/Device-HEMS/flexibility-range?delta_t_seconds=900"
-      TRAFO_SENSOR_P_READ_PATH: "http://edgex-device-hems:59986/api/v3/device/name/Device-Modbus-SMP4250/trafo-sensor-p"
+      TRAFO_SENSOR_P_READ_PATH: "http://edgex-core-command:59882/api/v3/device/name/Device-Modbus-SMP4250/trafo_p"
       CONTROL_REFRESH_INTERVAL_SECONDS: "60"
       PYTHONUNBUFFERED: "1"
       PYTHONDONTWRITEBYTECODE: "1"
