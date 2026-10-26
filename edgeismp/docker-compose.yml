@@ -26,6 +26,7 @@ services:
     command:
       - -cp=keeper.http://edgex-core-keeper:59883
       - --registry
+      - --overwrite
     container_name: edgex-device-pqi
     environment:
       EDGEX_SECURITY_SECRET_STORE: "false"
