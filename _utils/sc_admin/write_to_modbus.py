@@ -1,7 +1,16 @@
+import argparse
+
 from pymodbus.client import ModbusTcpClient
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Write transformer power to Modbus.")
+    parser.add_argument(
+        "--trafo_p", type=float, default=10.0,
+        help="Float value to write to the p register (default: 10.0).",
+    )
+    args = parser.parse_args()
+
     modbus_configuration = {}
     modbus_configuration["host"] = "localhost"
     modbus_configuration["port"] = 502
@@ -18,7 +27,7 @@ if __name__ == "__main__":
     timeout = modbus_configuration["timeout"]
     p_address = modbus_configuration["registers"]["p"]
     q_address = modbus_configuration["registers"]["q"]
-    p = 10
+    p = args.trafo_p
     q = 0
 
     client = ModbusTcpClient(host=host, port=port, timeout=timeout)
