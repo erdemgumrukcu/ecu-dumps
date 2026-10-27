@@ -6,8 +6,8 @@ from pymodbus.client import ModbusTcpClient
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Write transformer power to Modbus.")
     parser.add_argument(
-        "--trafo_p", type=float, default=10.0,
-        help="Float value to write to the p register (default: 10.0).",
+        "--trafo_p", type=int, default=10,
+        help="Integer value to write to the p register (default: 10).",
     )
     args = parser.parse_args()
 
